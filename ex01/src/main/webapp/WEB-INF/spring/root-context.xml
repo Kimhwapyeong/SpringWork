@@ -26,6 +26,20 @@
 			<property name="dataSource" ref="dataSource"></property>
 		</bean>
 		
+		<!-- File Upload 를 위한 세팅 -->
+		<!-- commons-fileupload, io 를 maven 세팅 필요 -->
+		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		    <property name="defaultEncoding" value="utf-8"></property>
+		    <!-- 1024 * 1024 * 10 bytes  10MB -->
+		    <property name="maxUploadSize" value="104857560"></property>
+		    <!-- 1024 * 1024 * 2 bytes  2MB -->
+		    <property name="maxUploadSizePerFile" value="2097152"></property>
+		    <property name="uploadTempDir" value ="file:/C:/upload/tmp"></property>
+		    <property name="maxInMemorySize" value="10485756"></property>
+		</bean>
+
+		
+		
 		<mybatis-spring:scan base-package="com.momo.mapper"/>
 		
 		

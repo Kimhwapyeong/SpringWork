@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  				<!-- 경로 + xml 파일명 -->
 <mapper namespace="com.momo.mapper.SampleMapper">
 
 	<select id="getTime2" resultType="String">
