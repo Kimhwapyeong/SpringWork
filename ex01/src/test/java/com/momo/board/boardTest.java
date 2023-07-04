@@ -93,4 +93,23 @@ public class boardTest {
 		assertEquals(res, 1);
 	}
 	
+	@Test
+	public void update() {
+		BoardVO board = new BoardVO();
+		board.setBno(3);
+		board.setTitle("집으로");
+		board.setContent("집에가자");
+		board.setWriter("김두한");
+		
+		int res = boardMapper.update(board);
+		
+		assertEquals(res, 1);
+	}
+	
+	@Test
+	public void getTotalCnt() {
+		int totalCnt = boardMapper.getTotalCnt();
+		log.info("totalCnt : " + totalCnt);
+	}
+	
 }

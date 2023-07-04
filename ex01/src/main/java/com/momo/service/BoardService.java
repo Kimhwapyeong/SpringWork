@@ -1,16 +1,14 @@
-package com.momo.mapper;
+package com.momo.service;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Service;
 
 import com.momo.vo.BoardVO;
 
-public interface BoardMapper {
-	
-	@Select("select * from tbl_board")
-	public List<BoardVO> getList();
-	
+@Service
+public interface BoardService {
+
 	public List<BoardVO> getListXml();
 	
 	public int insert(BoardVO board);
