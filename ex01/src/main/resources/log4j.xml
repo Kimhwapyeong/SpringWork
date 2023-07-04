@@ -11,8 +11,10 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.momo.ex">
-		<level value="info" />
+	<!-- /로그 네임 경로 수정하였음. 수정 전 : com.momo.ex -->
+	<logger name="com.momo">
+		<!-- /value값을 info로 놓으면 debug가 출력되지 않음. -->
+		<level value="debug" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
