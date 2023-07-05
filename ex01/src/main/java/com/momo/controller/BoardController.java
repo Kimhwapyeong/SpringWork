@@ -71,9 +71,9 @@ public class BoardController {
 	 * 
 	 * 리다이렉트 URL의 화면까지 데이터를 전달
 	 * 
-	 * Model과 같이 매개변수로 받아 사용 addAttribute : 쿼리스트링에 파라메터로 전송 addFlashAttribute : 세션에
-	 * 저장 후 페이지 전환
-	 * 
+	 * Model과 같이 매개변수로 받아 사용 
+	 * addAttribute : 쿼리스트링에 파라메터로 전송 
+	 * addFlashAttribute : 세션에 저장 후 페이지 전환
 	 * 
 	 */
 	@PostMapping("write") /// redirect를 할 때에도 파라메터를 넘기기 위한 매개변수

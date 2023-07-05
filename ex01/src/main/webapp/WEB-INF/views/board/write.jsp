@@ -52,7 +52,9 @@
 <div class="list-group w-auto">
 
 	<form name="writeForm" method="post">
-	<input type="hidden" name="bno" value="${board.bno }">
+	<c:if test="${ not empty board }">
+		<input type="hidden" name="bno" value="${board.bno }">
+	</c:if>
 		<div class="mb-3">
 		  <label for="title" class="form-label">제목</label>
 		  <input name="title" type="text" class="form-control" id="title" value=${board.title }>

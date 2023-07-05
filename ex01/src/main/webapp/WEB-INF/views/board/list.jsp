@@ -55,7 +55,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">알림</h1>
+        <h1 class="modal-title fs-5" id="exampleModalLabel"><img src="/resources/images/kim.png" width="30" height="35">알림</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -90,8 +90,8 @@
 	<c:forEach items="${list }" var="vo">
 		<a href="/board/view?bno=${vo.bno }"
 			class="list-group-item list-group-item-action d-flex gap-3 py-3"
-			aria-current="true"> <img src="https://github.com/twbs.png"
-			alt="twbs" width="32" height="32"
+			aria-current="true"> <img src="/resources/images/kim.png"
+			alt="twbs" width="32" height="40"
 			class="rounded-circle flex-shrink-0">
 			<div class="d-flex gap-2 w-100 justify-content-between">
 				<div>

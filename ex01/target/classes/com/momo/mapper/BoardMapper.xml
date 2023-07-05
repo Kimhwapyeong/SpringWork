@@ -23,7 +23,7 @@
 	<!-- /이 안에 있는 문장은 마크업이 아니다
 			(근데 버전 업되어서 그런지 부등호를 넣어도 원래 쿼리문으로 인식했음) -->
 	<![CDATA[
-		select * from tbl_board
+		select * from tbl_board order by regdate desc
 	]]>
 	</select>
 	
