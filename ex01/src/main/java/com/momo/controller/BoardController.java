@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.momo.service.BoardService;
+import com.momo.vo.BnoArr;
 import com.momo.vo.BoardVO;
 import com.momo.vo.Criteria;
 
@@ -136,8 +137,11 @@ public class BoardController {
 
 	@GetMapping("delete")
 	public String delete(BoardVO paramVO, Model model, RedirectAttributes rttr) {
-		int res = boardService.delete(paramVO.getBno());
-		
+		//System.out.println("getBno() : " + paramVO.getBno());
+		String[] bnoArr = paramVO.getBno().split(",");
+		BnoArr bnoArry = new BnoArr();
+		bnoArry.setBnoArr(bnoArr);
+		int res = boardService.delete(bnoArry);
 		if(res > 0) {
 			rttr.addFlashAttribute("message", paramVO.getBno() + "번 게시물 삭제 완료");
 			return "redirect:/board/list";
@@ -147,5 +151,8 @@ public class BoardController {
 		}
 		
 	}
+
+
+
 	
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.momo.vo.BnoArr;
 import com.momo.vo.BoardVO;
 import com.momo.vo.Criteria;
 
@@ -19,7 +20,8 @@ public interface BoardService {
 	
 	public BoardVO getOne(String bno);
 	
-	public int delete(String bno);
+//	public int delete(String bno);
+	public int delete(BnoArr bnoArry);
 	
 	public int update(BoardVO board);
 	

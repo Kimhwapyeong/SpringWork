@@ -58,7 +58,7 @@
 	 	///게시물 작성하고 바로 사용자에게 보여주고 싶을 때 사용할 수 있다
 	 -->
 	<insert id="insertSelectKey">
-		<selectKey keyProperty="bno" order="BEFORE" resultType="int">
+		<selectKey keyProperty="bno" order="BEFORE" resultType="String">
 			select seq_board.nextval from dual
 		</selectKey>
 		
@@ -70,8 +70,14 @@
 		select * from tbl_board where bno = #{bno}
 	</select>
 	
-	<delete id="delete">
+<!-- 	<delete id="delete">
 		delete tbl_board where bno in ( #{bno} )
+	</delete> -->
+	<delete id="delete">
+		delete tbl_board where bno in 
+		<foreach collection="bnoArr" item="item" index="index" separator="," open="(" close=")">
+		#{item}
+		</foreach>	
 	</delete>
 	
 	<update id="update">

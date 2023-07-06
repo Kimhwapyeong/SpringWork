@@ -52,6 +52,9 @@
 <div class="list-group w-auto">
 
 	<form name="writeForm" method="post">
+		<input type="hidden" name="pageNo" value="${param.pageNo }">
+		<input type="hidden" name="searchField" value="${param.searchField }">
+		<input type="hidden" name="searchWord" value="${param.searchWord }">
 		<div class="mb-3">
 		  <label for="title" class="form-label">제목</label>
 		  <input name="title" type="text" class="form-control" id="title" value=${board.title }>

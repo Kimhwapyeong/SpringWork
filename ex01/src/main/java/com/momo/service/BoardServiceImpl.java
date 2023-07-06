@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.momo.mapper.BoardMapper;
+import com.momo.vo.BnoArr;
 import com.momo.vo.BoardVO;
 import com.momo.vo.Criteria;
 import com.momo.vo.pageDto;
@@ -75,10 +76,15 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.getOne(bno);
 	}
 
+//	@Override
+//	public int delete(String bno) {
+//		
+//		return boardMapper.delete(bno);
+//	}
 	@Override
-	public int delete(String bno) {
+	public int delete(BnoArr bnoArry) {
 		
-		return boardMapper.delete(bno);
+		return boardMapper.delete(bnoArry);
 	}
 
 	@Override

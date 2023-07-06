@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Select;
 
+import com.momo.vo.BnoArr;
 import com.momo.vo.BoardVO;
 import com.momo.vo.Criteria;
 
@@ -20,7 +21,8 @@ public interface BoardMapper {
 	
 	public BoardVO getOne(String bno);
 	
-	public int delete(String bno);
+//	public int delete(String bno);
+	public int delete(BnoArr bnoArr);
 	
 	public int update(BoardVO board);
 	

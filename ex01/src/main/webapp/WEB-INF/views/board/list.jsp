@@ -36,14 +36,15 @@ function deleteBoard() {
 	let delNo = "";
 	// 배열을 돌면서 저장된 변수 e의 value를 delNo 변수에 +
 	delNoList.forEach((e)=>{
-		delNo += e.value + ',';
+		delNo += e.value + ",";
 	})
 	// 마지막 , 삭제
 	delNo = delNo.substr(0, delNo.length-1);
 	console.log(delNo);
-	// 삭제 요청
+	// 삭제 요청 
 	searchForm.action="../board/delete";
 	searchForm.bno.value=delNo;
+//	searchForm.bnoArr.value=delNoList;
 	searchForm.submit();
 	
 }
