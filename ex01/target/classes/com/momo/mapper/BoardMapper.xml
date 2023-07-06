@@ -23,8 +23,19 @@
 	<!-- /이 안에 있는 문장은 마크업이 아니다
 			(근데 버전 업되어서 그런지 부등호를 넣어도 원래 쿼리문으로 인식했음) -->
 	<![CDATA[
-		select * from tbl_board order by regdate desc
+	select * 
+	from (
+		select t.*, rownum rn
+		from (
+			select *
+			from tbl_board
+			where bno>0 
 	]]>
+			<include refid="criteria"/>
+			order by bno desc
+			) t 
+		)
+	where rn between #{startNo} and #{endNo} 
 	</select>
 	
 	<!-- 
@@ -60,7 +71,7 @@
 	</select>
 	
 	<delete id="delete">
-		delete tbl_board where bno = #{bno}
+		delete tbl_board where bno in ( #{bno} )
 	</delete>
 	
 	<update id="update">
@@ -73,7 +84,37 @@
 	
 	<!-- select에는 resultType을 꼭 정해줘야 한다. -->
 	<select id="getTotalCnt" resultType="int">
-		select count(*) from tbl_board
+		select count(*) 
+		from tbl_board
+		where 1=1
+		<include refid="criteria"/>
 	</select>
+	
+	<!-- 
+	   반복되는 쿼리를 미리 작성해놓고 재활용합니다
+	   	반복할 쿼리 선언 : <sql id="">
+	   	선언한 쿼리 사용 : <include refid="">
+	   	변수 사용 방법 <property name="">
+	   	
+	   	refId = reference id
+	-->
+	<sql id="criteria">
+		<choose>
+			<when test="searchField == 'title'">
+				and title like '%'||#{searchWord}||'%'
+			</when>
+			<when test="searchField == 'content'">
+				and content like '%'||#{searchWord}||'%'
+			</when>
+			<when test="searchField == 'writer'">
+				and writer like '%'||#{searchWord}||'%'
+			</when>
+			<when test="searchField == 'all'">
+				and title like '%'||#{searchWord}||'%'
+				or content like '%'||#{searchWord}||'%'
+				or writer like '%'||#{searchWord}||'%'
+			</when>
+		</choose>
+	</sql>
 	
 </mapper>

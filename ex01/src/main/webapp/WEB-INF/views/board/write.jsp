@@ -52,9 +52,6 @@
 <div class="list-group w-auto">
 
 	<form name="writeForm" method="post">
-	<c:if test="${ not empty board }">
-		<input type="hidden" name="bno" value="${board.bno }">
-	</c:if>
 		<div class="mb-3">
 		  <label for="title" class="form-label">제목</label>
 		  <input name="title" type="text" class="form-control" id="title" value=${board.title }>
@@ -65,17 +62,22 @@
 		</div>
 		<div class="mb-3">
 		  <label for="writer" class="form-label">작성자</label>
-		  <input name="writer" type="text" class="form-control" id="writer" value=${board.writer }>
+		  <input name="writer" type="text" class="form-control" id="writer" value=${board.writer }
+		  						${ not res?"readonly":"" }>
 		</div>
 		<div class="d-grid gap-2 d-md-flex justify-content-md-center">
+			<!-- board가 없으면 글쓰기 -->
 			<c:if test="${ res }">
 				<button type="button" class="btn btn-primary btn-lg" onclick="requestAction('/board/write')">글쓰기</button>
 			</c:if>
+			<!-- board가 있으면 수정하기 -->
 			<c:if test="${ not res }">
 				<button type="button" class="btn btn-primary btn-lg" onclick="requestAction('/board/edit')">수정완료</button>
+				<input type="hidden" name="bno" value="${board.bno }">
 			</c:if>
 			<button type="reset" class="btn btn-secondary btn-lg">초기화</button>
 		</div>
+		<!-- <input type="text" name="title"> -->
 	</form>
 	
 </div>

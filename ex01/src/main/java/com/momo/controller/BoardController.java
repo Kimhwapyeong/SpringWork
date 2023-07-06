@@ -2,8 +2,6 @@ package com.momo.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.momo.service.BoardService;
 import com.momo.vo.BoardVO;
+import com.momo.vo.Criteria;
 
 import lombok.extern.log4j.Log4j;
 
@@ -38,20 +37,28 @@ public class BoardController {
 
 	}
 
-	@GetMapping("list_bs")
-	public void list_bs(Model model) {
-		List<BoardVO> list = boardService.getListXml();
-		log.info("========================");
-		log.info(list);
-		model.addAttribute("list", list);
-	}
+//	@GetMapping("list_bs")
+//	public void list_bs(Model model) {
+//		List<BoardVO> list = boardService.getListXml();
+//		log.info("========================");
+//		log.info(list);
+//		model.addAttribute("list", list);
+//	}
 
+	/*
+	 * 파라메터의 자동 수집
+	 * 	기본 생성자를 이용해서 객체를 생성
+	 * 	-> setter 메서드를 이용해서 세팅
+	 * 
+	 */
 	@GetMapping("list")
-	public void getList(Model model) {
-		List<BoardVO> list = boardService.getListXml();
-		log.info("========================");
-		log.info(list);
-		model.addAttribute("list", list);
+	public void getList(Model model, Criteria cri) {
+//		List<BoardVO> list = boardService.getListXml(cri, model);
+		log.info("cri : " + cri);
+		boardService.getListXml(cri, model);
+		//log.info("========================");
+		//log.info(list);
+		//model.addAttribute("list", list);
 
 	}
 
@@ -101,14 +108,16 @@ public class BoardController {
 
 	
 	@PostMapping("edit") 
-	public String editPost(BoardVO board, Model model) { 
+	public String editPost(BoardVO board, Model model, RedirectAttributes rttr, Criteria cri) { 
 	int res = boardService.update(board);
   
 	if(res > 0) {
 		model.addAttribute("board", board);
 		model.addAttribute("message", board.getBno() + "번 게시물 수정 완료");
-		
+		model.addAttribute("cri", cri);
+		/// 왜 bno를 넘겨주지 않아도 되지? // board를 model에 담아가니까.
 		return "/board/view";
+		// return "/board/view?bno=" + board.getBno(); /// 안됨
   
 	} else { 
 		model.addAttribute("message", "수정 중 예외 발생");

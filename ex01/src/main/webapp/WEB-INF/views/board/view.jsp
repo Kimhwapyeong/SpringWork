@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,49 +25,11 @@
 		viewForm.submit();
 	}
 	
-	let msg = '${message}';
-	
-	window.onload = function() {
-		if(msg != ''){
-			// 메시지 출력
-			document.querySelector(".modal-body").innerHTML = msg;
-			// 버튼 출력 제어
-			document.querySelector("#btnModalSave").style.display='none';
-			
-			// 모달 생성
-			const myModal = new bootstrap.Modal('#myModal', {
-				  keyboard: false
-				});
-			
-			// 모달 보여주기
-			myModal.show();
-		}
-	}
 </script>
 </head>
 <body>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">알림</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">확인</button>
-        <button id="btnModalSave" type="button" class="btn btn-primary">저장</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <jsp:include page="../common/header.jsp"/>
-
 <main class="container">
 <div class="bg-light p-5 rounded">
 	<div class="d-grid gap-2 d-md-flex justify-content-md-center">
@@ -76,12 +39,21 @@
 		<h1>게시물</h1>
 	</div>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-	<a class="btn btn-lg btn-primary" href="/board/list"
-		role="button">리스트</a>
+	<c:if test="${ empty cri }" var="res">
+		<a class="btn btn-lg btn-primary" href="/board/list?pageNo=${param.pageNo }&searchField=${param.searchField}&searchWord=${param.searchWord}"
+			role="button">리스트</a>
+	</c:if>
+	<c:if test="${ not res }">
+		<a class="btn btn-lg btn-primary" href="/board/list?pageNo=${cri.pageNo }&searchField=${cri.searchField}&searchWord=${cri.searchWord}"
+			role="button">리스트</a>
+	</c:if>
 	</div>
 </div>
 
 <form method="get" name="viewForm">
+	<input type="hidden" name="pageNo" value=${param.pageNo }>
+	<input type="hidden" name="searchField" value=${param.searchField }>
+	<input type="hidden" name="searchWord" value=${param.searchWord }>
 	<input type="hidden" name="bno" value="${board.bno }">
 	<div class="mb-3">
 	  <label for="title" class="form-label">제목</label>
@@ -96,7 +68,7 @@
 	  <input name="writer" type="text" class="form-control" id="writer" value="${board.writer }" readonly>
 	</div>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-		<button type="submit" class="btn btn-primary btn-lg" onclick="requestAction('/board/edit')">수정하기</button>
+		<button type="button" class="btn btn-primary btn-lg" onclick="requestAction('/board/edit')">수정하기</button>
 		<button type="button" class="btn btn-secondary btn-lg" onclick="requestAction('/board/delete')">삭제하기</button>
 	</div>
 </form>
