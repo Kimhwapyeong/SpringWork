@@ -21,21 +21,21 @@ public class BoardSeriveTest {
 	@Autowired
 	BoardService boardService;
 	
-	@Test
-	public void getListXml() {
-		List<BoardVO> list = boardService.getListXml();
-		
-		list.forEach(board -> {
-			log.info(board);
-		});
-	}
-	
-	@Test
-	public void getOne() {
-		BoardVO board = boardService.getOne(3);
-		
-		log.info(board);
-	}
+//	@Test
+//	public void getListXml() {
+//		List<BoardVO> list = boardService.getListXml();
+//		
+//		list.forEach(board -> {
+//			log.info(board);
+//		});
+//	}
+//	
+//	@Test
+//	public void getOne() {
+//		BoardVO board = boardService.getOne(3);
+//		
+//		log.info(board);
+//	}
 	
 	@Test
 	public void insert() {

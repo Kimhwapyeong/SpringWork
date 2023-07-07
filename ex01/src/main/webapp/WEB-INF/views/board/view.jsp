@@ -49,7 +49,6 @@
 	</c:if>
 	</div>
 </div>
-cri : ${cri}
 <form method="get" name="viewForm">
 	<input type="hidden" name="pageNo" value=${param.pageNo }>
 	<input type="hidden" name="searchField" value=${param.searchField }>

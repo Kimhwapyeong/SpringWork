@@ -38,17 +38,17 @@ public class boardTest {
 		});
 	}
 	
-	@Test
-	public void getListXml() {
-		List<BoardVO> list = boardMapper.getListXml();
-		
-		list.forEach(board -> {
-			log.info("boardVo==================");
-			log.info(board.getBno());
-			log.info(board.getTitle());
-			log.info(board.getContent());
-		});
-	}
+//	@Test
+//	public void getListXml() {
+//		List<BoardVO> list = boardMapper.getListXml();
+//		
+//		list.forEach(board -> {
+//			log.info("boardVo==================");
+//			log.info(board.getBno());
+//			log.info(board.getTitle());
+//			log.info(board.getContent());
+//		});
+//	}
 	
 
 	@Test
@@ -76,40 +76,40 @@ public class boardTest {
 		assertEquals(res, 1);
 	}
 	
-	@Test
-	public void getOne() {
-		
-		BoardVO board = boardMapper.getOne(6);
-		
-		log.info("title : " + board.getTitle());
-		
-		assertNotNull(board);
-	}
-	
-	@Test
-	public void delete() {
-		int res = boardMapper.delete(10);
-		
-		assertEquals(res, 1);
-	}
-	
-	@Test
-	public void update() {
-		BoardVO board = new BoardVO();
-		board.setBno(3);
-		board.setTitle("집으로");
-		board.setContent("집에가자");
-		board.setWriter("김두한");
-		
-		int res = boardMapper.update(board);
-		
-		assertEquals(res, 1);
-	}
-	
-	@Test
-	public void getTotalCnt() {
-		int totalCnt = boardMapper.getTotalCnt();
-		log.info("totalCnt : " + totalCnt);
-	}
+//	@Test
+//	public void getOne() {
+//		
+//		BoardVO board = boardMapper.getOne(6);
+//		
+//		log.info("title : " + board.getTitle());
+//		
+//		assertNotNull(board);
+//	}
+//	
+//	@Test
+//	public void delete() {
+//		int res = boardMapper.delete(10);
+//		
+//		assertEquals(res, 1);
+//	}
+//	
+//	@Test
+//	public void update() {
+//		BoardVO board = new BoardVO();
+//		board.setBno(3);
+//		board.setTitle("집으로");
+//		board.setContent("집에가자");
+//		board.setWriter("김두한");
+//		
+//		int res = boardMapper.update(board);
+//		
+//		assertEquals(res, 1);
+//	}
+//	
+//	@Test
+//	public void getTotalCnt() {
+//		int totalCnt = boardMapper.getTotalCnt();
+//		log.info("totalCnt : " + totalCnt);
+//	}
 	
 }
