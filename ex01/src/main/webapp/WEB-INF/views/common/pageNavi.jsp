@@ -19,15 +19,16 @@
 	  <ul class="pagination justify-content-end">
 
 	    <li class="page-item ${pageDto.prev?'':'disabled' }">
-	      <button class="page-link" onclick="go(${ pageDto.startNo-1 })">Previous</button>
+	    <!-- 버튼으로 했더니 이전 버전의 bootstrap css에서 style 적용이 되지 않음. -->
+	      <a class="page-link" onclick="go(${ pageDto.startNo-1 })" href="#">Previous</a>
 	    </li>
 
 	    <c:forEach begin="${ pageDto.startNo }" end="${ pageDto.endNo }" var="i">
-		    <li class="page-item"><button class="page-link ${ pageDto.cri.pageNo eq i?'active':'' }" onclick="go(${i})">${ i }</button></li>
+		    <li class="page-item"><a class="page-link ${ pageDto.cri.pageNo eq i?'active':'' }" onclick="go(${i})" href="#">${ i }</a></li>
 	    </c:forEach>
 
 	    <li class="page-item ${pageDto.next?'':'disabled' }">
-	      <button class="page-link" onclick="go(${ pageDto.endNo+1 })">Next</button>
+	      <a class="page-link" onclick="go(${ pageDto.endNo+1 })" href="#">Next</a>
 	    </li>
 
 	  </ul>

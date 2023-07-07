@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.momo.mapper.BookMapper;
 import com.momo.vo.BookVO;
+import com.momo.vo.Criteria;
 
 import lombok.extern.log4j.Log4j;
 
@@ -25,11 +26,23 @@ public class BookMapperTest {
 	
 	@Test
 	public void getList() {
-		List<BookVO> list = bm.getList();
+		
+		Criteria cri = new Criteria();
+		cri.setSearchField("title");
+		cri.setSearchWord("췍");
+		
+		List<BookVO> list = bm.getList(cri);
 		
 		assertNotNull(list);
 //		list.forEach(book -> {
 //			log.info(book.getTitle());
 //		});
+	}
+	
+	@Test
+	public void getOne() {
+		BookVO book = bm.getOne("370");
+		
+		log.info(book.getTitle());
 	}
 }

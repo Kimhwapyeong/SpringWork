@@ -13,4 +13,7 @@ public interface BookService {
 
 	public List<BookVO> getList(Criteria cri, Model model);
 	
+	public int getTotalCnt(Criteria cri);
+	
+	public BookVO getOne(String no, Model model);
 }

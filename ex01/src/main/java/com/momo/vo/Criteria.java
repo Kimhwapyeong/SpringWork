@@ -14,6 +14,8 @@ public class Criteria {
 	private int startNo = 1;
 	private int endNo = 10;
 	
+	
+	/// 필드값이 넘어와서 객체 입력될 때 set 메서드를 사용한다.
 	public void setPageNo(int pageNo) {
 		this.pageNo = pageNo;
 		if(pageNo > 0) {

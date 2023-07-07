@@ -14,11 +14,36 @@
 				select no, title, rentyn, author, ofile, sfile
 							, decode(rentyn,'Y','대여중','대여가능') rentStr 
 				from book
+				where no>0
+				<include refid="criteria"/>
 				order by no desc 
 				) t
 			)
 		where rn between #{startNo} and #{endNo}
 	</select>
 	
+	<select id="getTotalCnt" resultType="int">
+		select count(*)
+		from book
+		where 1=1
+		<include refid="criteria"/>
+	</select>
+	
+	<sql id="criteria">
+		<choose>
+			<when test="searchField == 'title'">
+				and title like '%'||#{searchWord}||'%'
+			</when>
+			<when test="searchField == 'author'">
+				and author like '%'||#{searchWord}||'%'
+			</when>
+		</choose>
+	</sql>
+	
+	<select id="getOne" resultType="com.momo.vo.BookVO">
+		select *
+		from book
+		where no = #{no}
+	</select>
 	
 </mapper>

@@ -18,6 +18,22 @@
                         <div class="panel-heading">
                                                           도서 리스트
                         </div>
+                        <form name="searchForm" action="/book/list">
+                        	<input type="hidden" name="pageNo" value="${ pageDto.cri.pageNo }">
+                        	<div class="form-inline text-center">
+                        	<p></p>
+	                           <div class="form-group">
+	                                <select class="form-control" name="searchField">
+	                                    <option value="title" ${ pageDto.cri.searchField eq 'title'?"selected":"" }>제목</option>
+	                                    <option value="author" ${ pageDto.cri.searchField eq 'author'?"selected":"" }>작가</option>
+	                                </select>
+	                            </div>
+	                            <div class="form-group">
+	                                <input class="form-control" name="searchWord" value="${ pageDto.cri.searchWord }">
+	                            </div>
+	                            <button type="submit" class="btn btn-default" onclick="go(1)">검색</button>
+                            </div>
+                        </form>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
@@ -35,7 +51,7 @@
 	                                    <tr>
 	                                        <td><input type="checkbox" name="check" value="${ book.no }"></td>
 	                                        <td>${ book.no }</td>
-	                                        <td>${ book.title }</td>
+	                                        <td><a href="/book/view?no=${ book.no }">${ book.title }</a></td>
 	                                        <td>${ book.author }</td>
 	                                        <td class="center">${ book.rentStr }</td>
 	                                    </tr>

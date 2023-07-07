@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.momo.service.BookService;
+import com.momo.vo.BookVO;
 import com.momo.vo.Criteria;
 
 import lombok.extern.log4j.Log4j;
@@ -28,5 +29,11 @@ public class BookController {
 		
 		// return "/book/list"; (void로 하면 이 코드가 생략된 상태)
 		// -> WEB-INF/views/book/list.jsp
+	}
+	
+	@GetMapping("view")
+	public void getOne(String no, Model model) {
+		model.addAttribute("book", bs.getOne(no, model));
+		
 	}
 }
