@@ -28,8 +28,8 @@ public class BookMapperTest {
 	public void getList() {
 		
 		Criteria cri = new Criteria();
-		cri.setSearchField("title");
-		cri.setSearchWord("췍");
+		cri.setSearchField("");
+		cri.setSearchWord("");
 		
 		List<BookVO> list = bm.getList(cri);
 		
