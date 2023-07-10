@@ -25,6 +25,12 @@ public class BoardController {
 	@Autowired
 	BoardService boardService;
 
+	@GetMapping("/reply/test")
+	public String test() {
+		
+		return "/reply/test";
+	}
+	
 	/**
 	 * /board/msg WEB-INF/views/board/msg.jsp
 	 */
