@@ -85,11 +85,10 @@ public class ReplyController {
 		return map;
 	}
 	
-	@GetMapping("/reply/edit/{rno}/{reply}")
-	public Map<String, Object> edit(@PathVariable("rno") int rno, @PathVariable("reply") String reply){
-		ReplyVO vo = new ReplyVO();
-		vo.setRno(rno);
-		vo.setReply(reply);
+	@PostMapping("/reply/edit")
+	public Map<String, Object> edit(@RequestBody ReplyVO vo/*, @PathVariable("rno") int rno*/){
+		//vo.setRno(rno);
+
 		int res = service.edit(vo);
 		
 		Map<String, Object> map = new HashMap<String, Object>();

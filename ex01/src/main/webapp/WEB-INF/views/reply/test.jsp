@@ -17,8 +17,8 @@
 		fetch('/reply/list/' + bno)
 		// response.json() : 요청 결과를 js object형식으로 변환
 		.then(response => response.json())
-		// 반환받은 오브젝트를 이용하여 화면에 출력합니다.
 		
+		// 반환받은 오브젝트를 이용하여 화면에 출력합니다.
 		.then(list => replyView(list));
 		///	.then(map => callback(map));  /// 보통 map으로 잘 받아옴
 	}
@@ -31,27 +31,13 @@
 		// div 초기화
 		replyDiv.innerHTML = '';
 		
-		/// 내가 한 반복문
-/* 		for(i in list){
-			
-			replyDiv.innerHTML 
-			+= '<figure>'
-			+  	'<blockquote class="blockquote">'
-			+    	'<p>' + list[i].reply + '</p>'
-			+  	'</blockquote>'
-			
-			+  	'<figcaption class="blockquote-footer">'
-			+    	list[i].replyer + '<cite title="Source Title">&nbsp&nbsp' + list[i].replydate + '</cite>'
-			+  	'</figcaption>'
-			+ '</figure>';
-		} */
-		
 		// 댓글 리스트로부터 댓글을 하나씩 읽어와서 div에 출력
+		/// index를 넣어주는 이유는 id 때문, 변수명을 index로 하지 않아도 index값임
 		list.forEach((reply, index) => {
 			replyDiv.innerHTML 
 			+= '<figure id="reply' + index + '">'
 			+  	'<blockquote class="blockquote">'
-			+    	'<p>' + reply.reply 
+			+    	'<p>' + reply.reply 											/// index값을 넘겨 주어야 id를 선택해서 innerHTML을 해줄 수 있음
 			+ 			'&nbsp&nbsp<i class="fa-regular fa-pen-to-square" onclick="replyEdit(' + index + ', ' + reply.rno + ')"></i>'
 			+ 			'<i class="fa-regular fa-trash-can" onclick="replyDelete('+ reply.rno +')"></i></p>'
 			+  	'</blockquote>'
@@ -66,21 +52,32 @@
 	
 	function replyEdit(index, rno){
 		document.querySelector("#reply" + index).innerHTML
-			= '<input type="hidden" id="rno" name="rno" value="' + rno + '">'
+			= '<input type="hidden" id="rno" name="rno" value="' + rno + '">'  // 필요 없는 코드
 			+ '<div class="input-group mb-3">'
 			+  '<input type="text" id="editReply" class="form-control" placeholder="내용을 입력하세요" aria-label="Recipient\'s username" aria-describedby="basic-addon2">'
-			+  '<span class="input-group-text" id="btnReplyEdit" onclick="edit('+ rno +', ' + editReply.innerText + ')">수정완료</span>'
+			+  '<span class="input-group-text" id="btnReplyEdit" onclick="edit('+ rno + ')")">수정완료</span>'
 			+ '</div>';
 		
-			
-		function edit(rno, reply){
-			fetch('/reply/edit/' + rno +'/' + reply)
-			// response.json() : 요청 결과를 js object형식으로 변환
+	}
+	
+	/// 댓글 수정
+	function edit(rno){
+		let reply = document.querySelector("#editReply").value;
+		
+		let replyObj = {
+				rno : rno
+				, reply : reply
+			}
+		
+		let replyJson = JSON.stringify(replyObj);
+		
+		fetch('/reply/edit'
+				, {method : 'post'
+					, headers : {'Content-Type' : 'application/json'}
+					, body : replyJson})
+			// 4. 응답
 			.then(response => response.json())
-			// 반환받은 오브젝트를 이용하여 화면에 출력합니다.
-			
 			.then(map => replyRes(map));
-		}
 	}
 	
 /* 		btnReplyEdit.addEventListener('click', () => {
