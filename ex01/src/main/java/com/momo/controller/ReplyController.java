@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.momo.service.ReplyService;
+import com.momo.vo.Criteria;
 import com.momo.vo.ReplyVO;
+import com.momo.vo.pageDto;
 
 import lombok.extern.log4j.Log4j;
 
@@ -35,17 +37,38 @@ public class ReplyController {
 	/**
 	 * PathVariable
 	 * 		URL 경로에 있는 값을 파라메터로 추출하려고 할 때 사용
+	 * 
+	 * 		URL 경로의 일부를 변수로 사용
+	 * 
 	 * @return
 	 */
-	@GetMapping("/reply/list/{bno}")
-	public List<ReplyVO> getList(@PathVariable("bno") int bno){
+	@GetMapping("/reply/list/{bno}/{page}")
+	public Map<String, Object> getList(@PathVariable("bno") int bno
+									,@PathVariable("page") int page){
 		log.info("bno : " + bno);
-		return service.getList(bno);
+		Criteria cri = new Criteria();
+		cri.setAmount(5);
+		cri.setPageNo(page);
+		
+		// 페이지 처리(시작번호 ~ 끝번호)
+		int totalCnt = service.totalCnt(bno);
+		List<ReplyVO> list = service.getList(bno, cri);
+		
+		// 페이지 블럭 생성
+		pageDto pageDto = new pageDto(cri, totalCnt);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("list", list);
+		map.put("pageDto", pageDto);
+		
+		return map;
 	}
 	
 	/**
 	 * RequestBody
 	 * 		JSON 데이터를 원하는 타입으로 바인딩 처리
+	 * 		파라메터 자동 수집
 	 * 
 	 * @param vo
 	 * @return

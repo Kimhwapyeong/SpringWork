@@ -53,7 +53,7 @@
 	<input type="hidden" name="pageNo" value=${param.pageNo }>
 	<input type="hidden" name="searchField" value=${param.searchField }>
 	<input type="hidden" name="searchWord" value=${param.searchWord }>
-	<input type="hidden" name="bno" value="${board.bno }">
+	<input type="hidden" name="bno" id="bno" value="${board.bno }">
 	<div class="mb-3">
 	  <label for="title" class="form-label">제목</label>
 	  <input name="title" type="text" class="form-control" id="title" value="${board.title }" readonly>
@@ -71,6 +71,7 @@
 		<button type="button" class="btn btn-secondary btn-lg" onclick="requestAction('/board/delete')">삭제하기</button>
 	</div>
 </form>
+<jsp:include page="../reply/test.jsp"/>
 </main>
 
 
