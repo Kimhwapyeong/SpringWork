@@ -107,14 +107,14 @@
 		
 		// prev 버튼
 		+    '<li class="page-item '+ disabledStr +'">'
-		+      '<a class="page-link" href="#" onclick="go('+ ( pageDto.startNo -1 ) +')">Previous</a>'
+		+      '<a class="page-link" href="#none" onclick="go('+ ( pageDto.startNo -1 ) +')">Previous</a>'
 		+    '</li>'
 		
 		// 반복해서 페이지 번호를 출력
 		for(let i=pageDto.startNo; i<=pageDto.endNo; i++){
 			let activeStr = (pageDto.cri.pageNo == i) ? 'active' : '';
 			pageBlock
-			+= '<li class="page-item"><a class="page-link '+ activeStr +'" href="#" onclick="go('+i+')">' + i + '</a></li>'
+			+= '<li class="page-item"><a class="page-link '+ activeStr +'" href="#none" onclick="go('+i+')">' + i + '</a></li>'
 		}
 /* 		+    '<li class="page-item active" aria-current="page">'
 		+      '<span class="page-link">2</span>'
@@ -125,7 +125,7 @@
 		disabledStr = (pageDto.next) ? '' : 'disabled';
 		pageBlock
 		+=   '<li class="page-item '+ disabledStr +'">'
-		+      '<a class="page-link" href="#" onclick="go('+ (pageDto.endNo + 1) +')">Next</a>'
+		+      '<a class="page-link" href="#none" onclick="go('+ (pageDto.endNo + 1) +')">Next</a>'
 		+    '</li>'
 		+  '</ul>'
 		+'</nav>';
@@ -137,6 +137,7 @@
 	function go(page) {
 		document.querySelector("#page").value = page;
 		getList();
+		//document.getElementById('nickname').scrollIntoView();
 	}
 	
 	// 수정 화면 보여주기
