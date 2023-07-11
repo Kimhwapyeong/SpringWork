@@ -196,7 +196,7 @@
 				, reply : reply
 			}
 		
-		// 3. 객체를 json 타입으로 변환
+/* 		// 3. 객체를 json 타입으로 변환
 		let replyJson = JSON.stringify(replyObj);
 		
 		console.log(replyJson);
@@ -208,7 +208,9 @@
 					, body : replyJson})
 			// 4. 응답
 			.then(response => response.json())
-			.then(map => replyRes(map));
+			.then(map => replyRes(map)); */
+			
+		fetchPost('/reply/edit', replyObj, replyRes);
 	}
 	
 /* 		btnReplyEdit.addEventListener('click', () => {
