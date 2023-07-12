@@ -12,7 +12,13 @@
 <title>Insert title here</title>
 <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/navbar-fixed/">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+<!-- CSS -->
 <link href="/resources/css/style.css" rel="stylesheet">
+
+<!-- JS -->
+<script src="/resources/js/reply.js"></script>
+
 <style>
    body {
 	  min-height: 75rem;
@@ -20,10 +26,43 @@
    }
 </style>
 <script type="text/javascript">
-	function requestAction(url) {
+
+	/// header.jsp 에 window.onload가 이미 있어서 적용되지 않음
+	/// window.onload는 한 개밖에 적용이 되지 않기 때문
+	/// 그러면 왜 window.onload를 사용하는지는 모르겠음.
+	window.addEventListener('load', function(){
+		
+		// 수정페이지로 이동
+		btnEdit.addEventListener('click', function(){
+			viewForm.action='/board/edit';
+			viewForm.submit();
+		});
+		
+		// 삭제 처리 후 리스트 페이지로 이동
+		btnDelete.addEventListener('click', function(){
+			viewForm.action='/board/delete';
+			viewForm.submit();
+		});
+		
+		// 리스트 페이지로 이동
+		btnList.addEventListener('click', function(){
+			viewForm.action='/board/list';
+			viewForm.submit();
+		});
+		
+		// 답글등록 버튼
+		btnReplyWrite.addEventListener('click', function(){
+			replyWrite();
+		});
+		
+		// 댓글 목록 조회 및 출력
+		getReplyList();
+	});
+
+/* 	function requestAction(url) {
 		viewForm.action=url;
 		viewForm.submit();
-	}
+	} */
 	
 </script>
 </head>
@@ -39,12 +78,13 @@
 		<h1>게시물</h1>
 	</div>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+	<!-- / 왜 둘로 나눴는지 생각해봐라 -->
 	<c:if test="${ empty cri }" var="res">
-		<a class="btn btn-lg btn-primary" href="/board/list?pageNo=${param.pageNo }&searchField=${param.searchField}&searchWord=${param.searchWord}"
-			role="button">리스트</a>
+<%-- 	<a class="btn btn-lg btn-primary" href="/board/list?pageNo=${param.pageNo }&searchField=${param.searchField}&searchWord=${param.searchWord}" role="button">리스트</a> --%>
+		<a class="btn btn-lg btn-primary" href="#" id="btnList" role="button">리스트</a>
 	</c:if>
 	<c:if test="${ not res }">
-		<a class="btn btn-lg btn-primary" href="/board/list?pageNo=${cri.pageNo }&searchField=${cri.searchField}&searchWord=${cri.searchWord}"
+		<a class="btn btn-lg btn-primary" href="#" id="btnList"
 			role="button">리스트</a>
 	</c:if>
 	</div>
@@ -53,6 +93,7 @@
 	<input type="hidden" name="pageNo" value=${param.pageNo }>
 	<input type="hidden" name="searchField" value=${param.searchField }>
 	<input type="hidden" name="searchWord" value=${param.searchWord }>
+	<!-- / 이 input값은 댓글 리스트를 받아올 때 사용된다. -->
 	<input type="hidden" name="bno" id="bno" value="${board.bno }">
 	<div class="mb-3">
 	  <label for="title" class="form-label">제목</label>
@@ -67,11 +108,23 @@
 	  <input name="writer" type="text" class="form-control" id="writer" value="${board.writer }" readonly>
 	</div>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-		<button type="button" class="btn btn-primary btn-lg" onclick="requestAction('/board/edit')">수정하기</button>
-		<button type="button" class="btn btn-secondary btn-lg" onclick="requestAction('/board/delete')">삭제하기</button>
+		<button type="button" class="btn btn-primary btn-lg" id="btnEdit">수정하기</button>
+		<!-- <button type="button" class="btn btn-primary btn-lg" id="btnEdit" onclick="requestAction('/board/edit')">수정하기</button> -->
+		<button type="button" class="btn btn-secondary btn-lg" id="btnDelete">삭제하기</button>
+		<!-- <button type="button" class="btn btn-secondary btn-lg" id="btnDelete" onclick="requestAction('/board/delete')">삭제하기</button> -->
 	</div>
 </form>
-<jsp:include page="../reply/test.jsp"/>
+<p></p>
+<!-- 댓글 리스트 -->
+<input type="text" id="replyer" value="작성자">
+<div class="input-group">
+  <span class="input-group-text">답글작성</span>
+  <input type="text" aria-label="First name" class="form-control" id="reply">
+  <input type="button" id="btnReplyWrite" aria-label="Last name" value="등록하기" class="input-group-text">
+</div>
+<div id="replyDiv"></div>
+<input type="hidden" id="page" name="page" value="1">
+<%-- <jsp:include page="../reply/test.jsp"/> --%>
 </main>
 
 

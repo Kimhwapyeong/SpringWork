@@ -11,7 +11,8 @@
       margin: 0;
       box-sizing: border-box;
     }
-    body {      
+    body {     
+   	  background-color : #eee; 
       display: flex;
       height: 100vh;
       /* 교차축 정렬 */
@@ -39,7 +40,7 @@
 		<div class="col-auto">
 			<label for="pw" class="visually-hidden">Password</label>
 			<input type="password" class="form-control" id="pw" name="pw"
-				placeholder="나만의시크릿넘버" required>
+				placeholder="비밀번호" required>
 		</div>
 		<div class="col-auto">
 			<button type="submit" class="btn btn-primary mb-3">로그인</button>

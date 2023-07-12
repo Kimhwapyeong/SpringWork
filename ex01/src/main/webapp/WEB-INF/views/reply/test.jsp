@@ -54,6 +54,7 @@
 	
 	// 1. 서버에 댓글리스트 요청
 	function getList(){
+		/// view.jsp의 input 으로부터 선택
 		let bno = document.querySelector("#bno").value;
 		let page = document.querySelector("#page").value;
 		
@@ -103,10 +104,19 @@
 		let disabledStr = (pageDto.prev) ? '' : 'disabled';
 		pageBlock
 		+= '<nav aria-label="...">'
-		+  '<ul class="pagination justify-content-center">'
+		+  '<ul class="pagination justify-content-center">';
+		
+		// 처음 버튼
+		if(pageDto.prev){
+			pageBlock		
+			+=   '<li class="page-item">'
+			+      '<a class="page-link" href="#none" onclick="go(1)"><<</a>'
+			+    '</li>'
+		}
 		
 		// prev 버튼
-		+    '<li class="page-item '+ disabledStr +'">'
+		pageBlock
+		+=   '<li class="page-item '+ disabledStr +'">'
 		+      '<a class="page-link" href="#none" onclick="go('+ ( pageDto.startNo -1 ) +')">Previous</a>'
 		+    '</li>'
 		
@@ -126,8 +136,16 @@
 		pageBlock
 		+=   '<li class="page-item '+ disabledStr +'">'
 		+      '<a class="page-link" href="#none" onclick="go('+ (pageDto.endNo + 1) +')">Next</a>'
-		+    '</li>'
-		+  '</ul>'
+		+    '</li>';
+		// 마지막 버튼
+		if(pageDto.next){
+			pageBlock
+			+=   '<li class="page-item">'
+			+      '<a class="page-link" href="#none" onclick="go('+ (pageDto.realEnd) +')">>></a>'
+			+    '</li>';			
+		}
+		pageBlock
+		+= '</ul>'
 		+'</nav>';
 		
 		replyDiv.innerHTML += pageBlock;
@@ -155,8 +173,9 @@
 	function replyEdit(index, rno/* , replyStr */){
 		let editBox = document.querySelector("#reply" + index);
 		let replyTxt = editBox.dataset.value;
-		let replyer = editBox.dataset.replyer;
-		let replydate = editBox.dataset.replydate;
+		///수정화면 취소하면 하나만 취소되게 하려고 하던 코드
+		//let replyer = editBox.dataset.replyer;
+		//let replydate = editBox.dataset.replydate;
 		//let rnoInt = editBox.dataset.rno;
 			editBox.innerHTML 
 			= '<div class="input-group mb-3">'
@@ -287,7 +306,7 @@
 </head>
 <body>
 <h2>답글달기<img src="/resources/images/kim.png" width="25" height="40"></h2>
-<!-- <input type="hidden" id="bno" name="bno" value="8"> -->
+<input type="hidden" id="bno" name="bno" value="8">
 <input type="hidden" id="page" name="page" value="1">
 <div class="input-group mb-3">
   <input type="text" id="replyer">	
