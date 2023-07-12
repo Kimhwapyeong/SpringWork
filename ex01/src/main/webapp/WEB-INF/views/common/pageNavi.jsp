@@ -17,13 +17,12 @@
 	<!-- 페이지 블럭 생성 -->
 	<nav aria-label="Page navigation example">
 	  <ul class="pagination justify-content-end">
-<%-- 	  	<c:if test="${pageDto.prev}">
+ 	  	<c:if test="${pageDto.prev}">
 		    <li class="page-item">
-		    <!-- 버튼으로 했더니 이전 버전의 bootstrap css에서 style 적용이 되지 않음. -->
-		      <a class="page-link" onclick="go(1)" href="#"><<</a>
+		      <a class="page-link" onclick="go(1)" href="#">&lt;&lt;</a>  <!-- / &lt; = < -->
 		    </li>
 	  		
-	  	</c:if> --%>
+	  	</c:if> 
 	    <li class="page-item ${pageDto.prev?'':'disabled' }">
 	    <!-- 버튼으로 했더니 이전 버전의 bootstrap css에서 style 적용이 되지 않음. -->
 	      <a class="page-link" onclick="go(${ pageDto.startNo-1 })" href="#">Previous</a>
@@ -36,7 +35,13 @@
 	    <li class="page-item ${pageDto.next?'':'disabled' }">
 	      <a class="page-link" onclick="go(${ pageDto.endNo+1 })" href="#">Next</a>
 	    </li>
-
+	
+		<c:if test="${ pageDto.next }">
+		    <li class="page-item">
+		      <a class="page-link" onclick="go(${pageDto.realEnd})" href="#">&gt;&gt;</a>  <!-- / &lt; = < -->
+		    </li>
+		</c:if>
+		
 	  </ul>
 	</nav>
 </body>

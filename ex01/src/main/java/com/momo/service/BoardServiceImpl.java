@@ -18,7 +18,7 @@ import com.momo.vo.pageDto;
  * 				목적으로 하는 시스템에서 컴포넌트 간의 내부 의존성을 줄이는 것을 추구하는 디자인 목표
  * 
  * Service
- * 		계층 구조상 미즈니스 영역을 담당하는 객체임을 표시
+ * 		계층 구조상 비즈니스 영역을 담당하는 객체임을 표시
  * 
  * root-context.xml
  * 	component-scan 속성에 패키지를 등록합니다.

@@ -43,6 +43,7 @@ function deleteBoard() {
 	console.log(delNo);
 	// 삭제 요청 
 	searchForm.action="../board/delete";
+	/// 이 값(배열을 문자열로 바꾼 값)을 넘겨주기 위해 BoardVO 에 bno를 String으로 선언한 것.
 	searchForm.bno.value=delNo;
 //	searchForm.bnoArr.value=delNoList;
 	searchForm.submit();
