@@ -24,7 +24,7 @@ import lombok.extern.log4j.Log4j;
  */
 @RestController
 @Log4j
-public class ReplyController {
+public class ReplyController extends CommonRestController{
 
 	@Autowired
 	ReplyService service;
@@ -57,12 +57,12 @@ public class ReplyController {
 		// 페이지 블럭 생성
 		pageDto pageDto = new pageDto(cri, totalCnt);
 		
-		Map<String, Object> map = new HashMap<String, Object>();
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		
+//		map.put("list", list);
+//		map.put("pageDto", pageDto);
 		
-		map.put("list", list);
-		map.put("pageDto", pageDto);
-		
-		return map;
+		return responseSelectMap(list, pageDto);
 	}
 	
 	/**
@@ -84,12 +84,8 @@ public class ReplyController {
 		try {
 			int res = service.insert(vo);
 			
-			if(res>0) {
-				map.put("result", "success");
-			} else {
-				map.put("result", "fail");
-				map.put("message", "댓글 등록중 예외사항이 발생하였습니다.");
-			}
+			return map = responseWriteMap(res);
+			
 		} catch(Exception e) {
 			map.put("result", "fail");
 			map.put("message", e.getMessage());
@@ -100,36 +96,16 @@ public class ReplyController {
 	
 	@GetMapping("/reply/delete/{rno}")
 	public Map<String, Object> delete(@PathVariable("rno") int rno){
-		int res = service.delete(rno);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		if(res>0) {
-			map.put("result", "success");
-		} else {
-			map.put("result", "fail");
-			map.put("message", "댓글 삭제중 예외사항이 발생하였습니다.");
-		}
-		
-		return map;
+
+		return responseDeleteMap(service.delete(rno));
 	}
 	
 	@PostMapping("/reply/edit")
 	public Map<String, Object> edit(@RequestBody ReplyVO vo/*, @PathVariable("rno") int rno*/){
-		//vo.setRno(rno);
 
-		int res = service.edit(vo);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		if(res>0) {
-			map.put("result", "success");
-		} else {
-			map.put("result", "fail");
-			map.put("message", "댓글 수정중 예외사항이 발생하였습니다.");
-		}
-		
-		return map;
+		return responseEditMap(service.edit(vo));
 	}
+	
+
 	
 }

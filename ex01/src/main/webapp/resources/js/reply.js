@@ -29,9 +29,21 @@ function fetchPost(url, obj, callback){
 	}
 }
 
-function getReplyList() {
+function getReplyList(page) {
+	
+	/*
+	 * falsey : false, 0, "", NaN, undefined, null
+	 * falsey한 값 이외의 값이 들어 있으면 true를 반환
+	 * 
+	 * page에 입력된 값이 없으면 1을 세팅
+	 */
+	if(!page){
+		page = 1
+	}
+	
 	let bno = document.querySelector("#bno").value;
-	let page = document.querySelector("#page").value;
+	/*let page = document.querySelector("#page").value;*/
+	
 	console.log('bno : ', bno);
 	
 	console.log('/reply/list/' + bno + '/' + page);
@@ -100,33 +112,39 @@ function replyView(map) {
 	let pageBlock =
 		`<nav aria-label="...">
 		  <ul class="pagination justify-content-center">`;
+			// 처음으로
 		  if(pageDto.prev){
 			  pageBlock +=
 			    `<li class="page-item">
-			      <a class="page-link" href="#none" onclick="go(${1})"><<</a>
+			      <a class="page-link" href="#none" onclick="getReplyList(${1})"><<</a>
 			    </li>`;
 		  }
+		  	// prev 버튼
 			pageBlock +=
 		    `<li class="page-item">
-		      <a class="page-link ${disabled}" href="#none" onclick="go(${pageDto.startNo-1})">Previous</a>
+		      <a class="page-link ${disabled}" href="#none" onclick="getReplyList(${pageDto.startNo-1})">Previous</a>
 		    </li>`;
-
+			
+		// 페이지 버튼
 		for(i=pageDto.startNo;i<=pageDto.endNo;i++){
 			let active = pageDto.cri.pageNo ==  i ? 'active' : '';
 			pageBlock +=
 			`<li class="page-item" aria-current="page">
-			<a class="page-link ${active}" href="#none" onclick="go(${i})">${i}</a>
+			<a class="page-link ${active}" href="#none" onclick="getReplyList(${i})">${i}</a>
 			</li>`;
 		}
+			// next 버튼
 			disabled = pageDto.next ? '' : 'disabled';
 		    pageBlock +=
 		    `<li class="page-item">
-		      <a class="page-link ${disabled}" href="#none" onclick="go(${pageDto.endNo+1})">Next</a>
+		      <a class="page-link ${disabled}" href="#none" onclick="getReplyList(${pageDto.endNo+1})">Next</a>
 		    </li>`;
+		    
+		    // 마지막 페이지
 		    if(pageDto.next){
 		    	pageBlock +=
 		    		`<li class="page-item">
-		    		<a class="page-link" href="#none" onclick="go(${pageDto.realEnd})">>></a>
+		    		<a class="page-link" href="#none" onclick="getReplyList(${pageDto.realEnd})">>></a>
 		    		</li>`;
 		    }
 		  pageBlock +=
@@ -136,10 +154,11 @@ function replyView(map) {
 	replyDiv.innerHTML += pageBlock;
 }
 
-function go(page){
+// getReplyList() 메서드에 page 매개변수를 받아세팅해주면서 go()함수가 필요 없어짐
+/*function go(page){
 	document.querySelector("#page").value = page;
-	getReplyList();
-}
+	getReplyList(page);
+}*/
 
 // 답글 등록하기
 function replyWrite(){

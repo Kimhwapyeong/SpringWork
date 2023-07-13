@@ -49,6 +49,11 @@ function deleteBoard() {
 	searchForm.submit();
 	
 }
+
+/* function write(){
+	searchForm.action="/board/write";
+	searchForm.submit();
+} */
 </script>
 </head>
 <body>
@@ -64,7 +69,8 @@ function deleteBoard() {
 		<h1>게시판</h1>
 	</div>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-	<a class="btn btn-lg btn-primary" href="/board/write"
+	<!-- <a class="btn btn-lg btn-primary" href="#" onclick="write()" -->
+ 	<a class="btn btn-lg btn-primary" href="/board/write?pageNo=${ pageDto.cri.pageNo }"
 		role="button">글쓰기</a>
 	<a class="btn btn-lg btn-primary" onclick="deleteBoard()" href="#"
 		role="button">삭제</a>

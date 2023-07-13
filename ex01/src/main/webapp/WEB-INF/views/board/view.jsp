@@ -90,6 +90,7 @@
 	</div>
 </div>
 <form method="get" name="viewForm">
+	<!-- 검색유지 -->
 	<input type="hidden" name="pageNo" value=${param.pageNo }>
 	<input type="hidden" name="searchField" value=${param.searchField }>
 	<input type="hidden" name="searchWord" value=${param.searchWord }>
@@ -123,7 +124,7 @@
   <input type="button" id="btnReplyWrite" aria-label="Last name" value="등록하기" class="input-group-text">
 </div>
 <div id="replyDiv"></div>
-<input type="hidden" id="page" name="page" value="1">
+<!-- <input type="hidden" id="page" name="page" value="1"> -->
 <%-- <jsp:include page="../reply/test.jsp"/> --%>
 </main>
 

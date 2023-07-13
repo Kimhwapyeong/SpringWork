@@ -24,6 +24,15 @@
 		writeForm.action=url;
 		writeForm.submit();
 	}
+	
+	window.addEventListener('load', function(){
+		
+		btnList.addEventListener('click', function(){
+			writeForm.action='/board/list';
+			writeForm.method='get';
+			writeForm.submit();
+		})
+	})
 </script>
 </head>
 <body>
@@ -44,17 +53,19 @@
 		</c:if>
 	</div>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-	<a class="btn btn-lg btn-primary" href="/board/list"
-		role="button">리스트</a>
+	<a class="btn btn-lg btn-primary" href="#"
+		role="button" id="btnList">리스트</a>
 	</div>
 </div>
 <p></p>
 <div class="list-group w-auto">
 
 	<form name="writeForm" method="post">
-		<input type="hidden" name="pageNo" value="${param.pageNo }">
+		<!-- 검색유지 -->
+		<input type="hidden" name="pageNo" value="${ param.pageNo }">
 		<input type="hidden" name="searchField" value="${param.searchField }">
 		<input type="hidden" name="searchWord" value="${param.searchWord }">
+		
 		<div class="mb-3">
 		  <label for="title" class="form-label">제목</label>
 		  <input name="title" type="text" class="form-control" id="title" value=${board.title }>

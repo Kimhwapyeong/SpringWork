@@ -97,7 +97,7 @@ public class BoardController {
 
 		if (res > 0) {
 			// url?message=등록.. (쿼리스트링으로 전달 -> param.message)
-			// rttr.addAttribute("message", "등록되었습니다.");
+			// rttr.addAttribute("message", "등록되었습니다."); /// 쿼리 스트링으로 전달됨
 
 			// 세션영역에 저장 -> message
 			// 새로고침시 유지되지 않음
@@ -121,8 +121,7 @@ public class BoardController {
 	if(res > 0) {
 		model.addAttribute("board", board);
 		model.addAttribute("message", board.getBno() + "번 게시물 수정 완료");
-		model.addAttribute("cri", cri);
-		/// 왜 bno를 넘겨주지 않아도 되지? // board를 model에 담아가니까.
+//		model.addAttribute("cri", cri);
 		return "/board/view";
 		// return "/board/view?bno=" + board.getBno(); /// 안됨
   

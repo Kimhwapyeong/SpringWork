@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -62,8 +63,12 @@
 					<li class="nav-item"><a class="nav-link active"
 						aria-current="page" href="#">Home</a></li>
 					<li class="nav-item"><a class="nav-link" href="/board/list">게시판</a></li>
-					<li class="nav-item"><a class="nav-link disabled">Disabled</a>
-					</li>
+					<c:if test="${ not empty member }" var="res">
+						<li class="nav-item nav-link">${ userId }님 대단히 환영합니다.</li>					
+					</c:if>
+					<c:if test="${ not res }">
+						<li class="nav-item nav-link">비화원 사용자 입니다.</li>					
+					</c:if>
 				</ul>
 				<form class="d-flex" role="search">
 					<input class="form-control me-2" type="search" placeholder="Search"
