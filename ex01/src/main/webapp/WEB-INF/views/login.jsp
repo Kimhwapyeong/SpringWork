@@ -55,6 +55,8 @@
 	    })
 	})
 	function loginCheck(map) {
+		/// 로그인 성공시 session영역에 id와 member객체가 저장되고
+		/// map에는 성공 여부와 메시지만 저장된다.
 		console.log(map);
 		// 로그인 성공 -> list로 이동
 		if(map.result == 'success'){

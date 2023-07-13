@@ -87,13 +87,18 @@ function replyView(map) {
 		list.forEach((reply, i) => {
 			replyBox += ''
 				+`    <tr id="tr${reply.rno}" data-reply="${reply.reply}">      `
-				+`      <td scope="row">${i+1}</td> `
+				+`      <td scope="row">${reply.rn}</td> ` /// ReplyVO에 rn필드를 넣어줌.
+				
 				+`      <td class="text-start">${reply.reply} 
-						<a href="#none" data-bs-toggle="tooltip" data-bs-title="수정" id="tip${reply.rno}">
-						<i class="fa-regular fa-pen-to-square" onclick="replyEdit(${reply.rno})"></i></a>
-						<a href="#none" data-bs-toggle="tooltip" data-bs-title="삭제">
-						<i class="fa-solid fa-trash" onclick="replyDelete(${reply.rno})"></i></a></td>  `
+						<a href="#none" id="tip${reply.rno}">
+						<i class="fa-regular fa-pen-to-square tooltip-1" onclick="replyEdit(${reply.rno})">
+						<span class="tooltip-text">수정</span></i></a>
+						<a href="#none">
+						<i class="fa-solid fa-trash tooltip-1" onclick="replyDelete(${reply.rno})">
+						<span class="tooltip-text">삭제</span></i></a></td>  `
+				
 				+`      <td>${reply.replyer}</td>   `
+				
 				+`      <td>${reply.updatedate}</td>`
 				+'    </tr>                         ';
 		});
@@ -120,10 +125,12 @@ function replyView(map) {
 			    </li>`;
 		  }
 		  	// prev 버튼
-			pageBlock +=
-		    `<li class="page-item">
-		      <a class="page-link ${disabled}" href="#none" onclick="getReplyList(${pageDto.startNo-1})">Previous</a>
-		    </li>`;
+		  if(list[0]){
+			  pageBlock +=
+				  `<li class="page-item">
+				  <a class="page-link ${disabled}" href="#none" onclick="getReplyList(${pageDto.startNo-1})">Previous</a>
+				  </li>`;
+		  }
 			
 		// 페이지 버튼
 		for(i=pageDto.startNo;i<=pageDto.endNo;i++){
@@ -135,10 +142,13 @@ function replyView(map) {
 		}
 			// next 버튼
 			disabled = pageDto.next ? '' : 'disabled';
-		    pageBlock +=
-		    `<li class="page-item">
-		      <a class="page-link ${disabled}" href="#none" onclick="getReplyList(${pageDto.endNo+1})">Next</a>
-		    </li>`;
+			if(list[0]){
+				pageBlock +=
+					`<li class="page-item">
+					<a class="page-link ${disabled}" href="#none" onclick="getReplyList(${pageDto.endNo+1})">Next</a>
+					</li>`;
+				
+			}
 		    
 		    // 마지막 페이지
 		    if(pageDto.next){
@@ -166,6 +176,8 @@ function replyWrite(){
 	let bno = document.querySelector("#bno").value;
 	let reply = document.querySelector("#reply").value;
 	let replyer = document.querySelector("#replyer").value;
+	/// 댓글 작성 후 댓글창 초기화
+	document.querySelector("#reply").value="";
 	let obj = {
 			bno : bno
 			, reply : reply

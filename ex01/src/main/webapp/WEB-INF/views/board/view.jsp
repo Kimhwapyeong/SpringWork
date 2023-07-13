@@ -24,6 +24,7 @@
 	  min-height: 75rem;
 	  padding-top: 4.5rem;
    }
+}
 </style>
 <script type="text/javascript">
 
@@ -117,12 +118,16 @@
 </form>
 <p></p>
 <!-- 댓글 리스트 -->
-<input type="text" id="replyer" value="작성자">
-<div class="input-group">
-  <span class="input-group-text">답글작성</span>
-  <input type="text" aria-label="First name" class="form-control" id="reply">
-  <input type="button" id="btnReplyWrite" aria-label="Last name" value="등록하기" class="input-group-text">
-</div>
+<!-- 그냥 if문으로 답글작성 div를 감싸주게 되면 script에서 btnReplyWrite 버튼을 찾지 못해 오류가 발생한다. -->
+<c:if test="${ empty member }"> <!-- / 맴버가 비어있으면 -->
+	<c:set var="loginCheck" value="display:none"></c:set> <!-- / 변수생성해서 -->
+</c:if>
+	<input type="hidden" id="replyer" value="${ userId }">
+	<div class="input-group" style="${loginCheck}"> <!-- / 스타일에 넣어준다. -->
+	  <span class="input-group-text">답글작성</span>
+	  <input type="text" aria-label="First name" class="form-control" id="reply">
+	  <input type="button" id="btnReplyWrite" aria-label="Last name" value="등록하기" class="input-group-text">
+	</div>
 <div id="replyDiv"></div>
 <!-- <input type="hidden" id="page" name="page" value="1"> -->
 <%-- <jsp:include page="../reply/test.jsp"/> --%>

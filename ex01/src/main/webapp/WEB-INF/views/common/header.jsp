@@ -6,6 +6,29 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+   .tooltip-1 {
+   display: inline-block;
+   color: black;
+   font-weight: bold;
+   }
+   
+   .tooltip-text {
+   display: none;
+   position: absolute;
+   max-width: 200px;
+   border: 1px solid;
+   border-radius: 5px;
+   padding: 10px;
+   font-size: 0.8em;
+   color: white;
+   background: gray;
+ 
+   }
+   
+   .tooltip-1:hover .tooltip-text {
+   display: block; 
+</style>
 <script src="https://kit.fontawesome.com/362f754739.js" crossorigin="anonymous"></script>
 <script type="text/javascript">
 	let msg = '${message}';
@@ -26,6 +49,7 @@
 			myModal.show();
 		}
 	}
+	
 </script>
 </head>
 <body>
@@ -63,13 +87,21 @@
 					<li class="nav-item"><a class="nav-link active"
 						aria-current="page" href="#">Home</a></li>
 					<li class="nav-item"><a class="nav-link" href="/board/list">게시판</a></li>
-					<c:if test="${ not empty member }" var="res">
-						<li class="nav-item nav-link">${ userId }님 대단히 환영합니다.</li>					
-					</c:if>
-					<c:if test="${ not res }">
-						<li class="nav-item nav-link">비화원 사용자 입니다.</li>					
-					</c:if>
 				</ul>
+			<div class="d-flex justify-content-end ">
+				<c:if test="${ not empty member }" var="res">
+					<li class="nav-item nav-link" style="color:white;">${ userId }님 대단히 환영합니다.</li>		
+					<li class="nav-item"><a class="nav-link" 
+								style="display:inline-block; color:white; padding-right:10px" 
+								href="/logout">로그아웃</a></li>			
+				</c:if>
+				<c:if test="${ not res }">
+					<li class="nav-item nav-link" style="color:white;">비화원 사용자 입니다.</li>
+					<li class="nav-item"><a class="nav-link" 
+								style="display:inline-block; color:white; padding-right:10px" 
+								href="/login">로그인</a></li>					
+				</c:if>
+			</div>
 				<form class="d-flex" role="search">
 					<input class="form-control me-2" type="search" placeholder="Search"
 						aria-label="Search">
