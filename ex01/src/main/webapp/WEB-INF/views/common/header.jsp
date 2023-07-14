@@ -87,19 +87,21 @@
 					<li class="nav-item"><a class="nav-link active"
 						aria-current="page" href="#">Home</a></li>
 					<li class="nav-item"><a class="nav-link" href="/board/list">게시판</a></li>
+					<c:if test="${ not empty member }" var="res">
+						<li class="nav-item"><a class="nav-link" 
+									href="/logout">로그아웃</a></li>			
+					</c:if>
+					<c:if test="${ not res }">
+						<li class="nav-item"><a class="nav-link" 
+									href="/login">로그인</a></li>					
+					</c:if>
 				</ul>
 			<div class="d-flex justify-content-end ">
-				<c:if test="${ not empty member }" var="res">
-					<li class="nav-item nav-link" style="color:white;">${ userId }님 대단히 환영합니다.</li>		
-					<li class="nav-item"><a class="nav-link" 
-								style="display:inline-block; color:white; padding-right:10px" 
-								href="/logout">로그아웃</a></li>			
+				<c:if test="${ res }">
+					<li class="nav-item nav-link" style="color:white; padding-right:10px;">${ member.name }님 환영합니다.</li>				
 				</c:if>
 				<c:if test="${ not res }">
-					<li class="nav-item nav-link" style="color:white;">비화원 사용자 입니다.</li>
-					<li class="nav-item"><a class="nav-link" 
-								style="display:inline-block; color:white; padding-right:10px" 
-								href="/login">로그인</a></li>					
+					<li class="nav-item nav-link" style="color:white; padding-right:10px;">비화원 사용자</li>			
 				</c:if>
 			</div>
 				<form class="d-flex" role="search">

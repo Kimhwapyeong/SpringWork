@@ -12,4 +12,8 @@ public interface MemberService {
 	
 	public Member login(Member member);
 	
+	public int insert(Member member);
+	
+	public int idCheck(Member member);
+	
 }

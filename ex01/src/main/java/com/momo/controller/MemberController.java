@@ -53,7 +53,7 @@ public class MemberController extends CommonRestController{
 			/// 반환은 당연히 map
 			return responseMap(1, "로그인");
 		} else {
-			return responseMap(0, "로그인");
+			return responseMap(REST_FAIL, "아이디/비밀번호를 확인해주세요.");
 		}
 		
 	}
@@ -64,6 +64,31 @@ public class MemberController extends CommonRestController{
 		request.getSession(true);
 		
 		return "redirect:/board/list";
+	}
+	
+	@PostMapping("/idCheck")
+	public @ResponseBody Map<String, Object> idCheck(@RequestBody Member member){
+		
+		int res = service.idCheck(member);
+		// count = 1 실패
+		/// insert, delete, update는 1이면 성공이지만 idCheck 쿼리는 0이 성공
+		if(res == 0) {
+			return responseMap(REST_SUCCESS, "사용 가능한 아이디 입니다.");
+		} else {
+			return responseMap(REST_FAIL, "이미 사용중인 아이디 입니다.");
+		}
+	}
+	
+	@PostMapping("/register")
+	public @ResponseBody Map<String, Object> register(@RequestBody Member member) {
+		
+		try {
+			int res = service.insert(member);
+			return responseWriteMap(res);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return responseMap(REST_FAIL, "등록중 예외사항이 발생하였습니다.");
+		}
 	}
 	
 }
