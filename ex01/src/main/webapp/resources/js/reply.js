@@ -30,13 +30,16 @@ function fetchPost(url, obj, callback){
 }
 
 function getReplyList(page) {
-	
+	/// 댓글 수정, 삭제 후에도 페이지를 유지하기 위해 
+	document.querySelector("#page").value = page;
 	/*
 	 * falsey : false, 0, "", NaN, undefined, null
 	 * falsey한 값 이외의 값이 들어 있으면 true를 반환
 	 * 
 	 * page에 입력된 값이 없으면 1을 세팅
 	 */
+	/// 하였으나 수정, 삭제 후 현재 페이지 유지를 위해 input:ip=page를 넣고, 기본값을 1을 주었기 때문에
+	/// 이 코드는 맨 처음 페이지를 출력할 때만 사용된다. 그 때도 page.value 값을 넣어주면 지워도 됨.
 	if(!page){
 		page = 1
 	}
@@ -196,7 +199,9 @@ function replyWrite(){
 function replyRes(map){
 	if(map.result == 'success'){
 		// 성공 : 리스트 조회 및 출력
-		getReplyList();
+		/// 댓글 수정, 삭제 후 현재 페이지 유지
+		let page = document.querySelector("#page").value
+		getReplyList(page);
 	} else {
 		// 실패 : 메시지 출력
 		alert(map.message);

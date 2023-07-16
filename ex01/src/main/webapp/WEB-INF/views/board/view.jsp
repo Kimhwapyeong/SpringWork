@@ -129,11 +129,11 @@
 	  <input type="button" id="btnReplyWrite" aria-label="Last name" value="등록하기" class="input-group-text">
 	</div>
 <div id="replyDiv"></div>
-<!-- <input type="hidden" id="page" name="page" value="1"> -->
+<input type="hidden" id="page" name="page" value="1">
 <%-- <jsp:include page="../reply/test.jsp"/> --%>
 </main>
 
-
+<div id="test"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
 </html>
