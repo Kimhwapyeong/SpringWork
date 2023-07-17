@@ -187,7 +187,7 @@
 	  <form name='signinForm'>
 	    <img class="mb-4" src="/resources/images/kim.png" alt="" width="100" height="100">
 	    <h1 class="h3 mb-3 fw-normal">로그인</h1>
-	   	<div id="msg"></div> 
+	   	<div id="msg">${ param.msg }</div> 
 	
 	    <div class="form-floating">
 	      <input type="text" class="form-control start" id="id" placeholder='id'>
