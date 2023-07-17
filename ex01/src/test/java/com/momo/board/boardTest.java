@@ -76,6 +76,13 @@ public class boardTest {
 		assertEquals(res, 1);
 	}
 	
+	@Test
+	public void updateReplyCnt() {
+		int res = boardMapper.updateReplyCnt(8, 1);
+		
+		assertEquals(1, res);
+	}
+	
 //	@Test
 //	public void getOne() {
 //		
@@ -111,5 +118,6 @@ public class boardTest {
 //		int totalCnt = boardMapper.getTotalCnt();
 //		log.info("totalCnt : " + totalCnt);
 //	}
+	
 	
 }

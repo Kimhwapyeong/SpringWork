@@ -91,6 +91,13 @@ public class ReplyController extends CommonRestController{
 			map.put("message", e.getMessage());
 		}
 			
+//		int res = service.insert(vo);
+//		if(res > 0) {
+//			return map = responseWriteMap(res);
+//		} else {
+//			map.put("result", "fail");
+//		}
+		
 		return map;
 	}
 	

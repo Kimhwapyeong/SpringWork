@@ -76,7 +76,7 @@
 		</div>
 		<div class="mb-3">
 		  <label for="writer" class="form-label">작성자</label>
-		  <input name="writer" type="text" class="form-control" id="writer" value=${board.writer }
+		  <input name="writer" type="text" class="form-control" id="writer" value=${userId }
 		  						${ not res?"readonly":"" }>
 		</div>
 		<div class="d-grid gap-2 d-md-flex justify-content-md-center">

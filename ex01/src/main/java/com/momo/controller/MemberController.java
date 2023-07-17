@@ -48,10 +48,20 @@ public class MemberController extends CommonRestController{
 		if(member != null) {
 			session.setAttribute("member", member);
 			session.setAttribute("userId", member.getId());
-			/// 맵을 생성하고, 파라메터로 넣어준 숫자로 성공, 실패를 확인하여
-			/// 성공 여부와 메시지를 맵에 put 하여주는 메소드
-			/// 반환은 당연히 map
-			return responseMap(1, "로그인");
+			Map<String, Object> map =
+					
+					/// 맵을 생성하고, 파라메터로 넣어준 숫자로 성공, 실패를 확인하여
+					/// 성공 여부와 메시지를 맵에 put 하여주는 메소드
+					/// 반환은 당연히 map
+					responseMap(REST_SUCCESS, "로그인 되었습니다.");
+			
+			if(member.getRole() != null && member.getRole().contains("ADMIN_ROLE")) {
+				// 관리자 로그인 -> 관리자 페이지로 이동
+				map.put("url", "/admin");
+			} else {
+				map.put("url", "/board/list");
+			}
+			return map;
 		} else {
 			return responseMap(REST_FAIL, "아이디/비밀번호를 확인해주세요.");
 		}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  				<!-- 경로 + xml 파일명 -->
+<mapper namespace="com.momo.mapper.LogMapper">
+
+	<insert id="insert">
+		insert into tbl_log (classname, methodname, params, errmsg, regdate) 
+		values (#{className}, #{methodName}
+				, decode(least(length(#{params}),500), 500, substr(#{params}, 1, 500), #{params})
+				, #{errmsg}, sysdate)
+	</insert>
+
+</mapper>

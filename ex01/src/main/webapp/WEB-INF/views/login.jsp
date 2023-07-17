@@ -165,7 +165,7 @@
 		console.log(map);
 		// 로그인 성공 -> list로 이동
 		if(map.result == 'success'){
-			location.href='/board/list';
+			location.href = map.url;
 		}else{
 			// 실패 -> 메시지 처리
 			msg.innerHTML = '<span style="color:#d45959">' + map.message + '</span>';		

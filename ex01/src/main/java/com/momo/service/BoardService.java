@@ -26,4 +26,6 @@ public interface BoardService {
 	public int update(BoardVO board);
 	
 	public int getTotalCnt(Criteria cri);
+	
+	public int updateReplyCnt(int bno, int amount);
 }

@@ -1,6 +1,7 @@
 package com.momo.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -24,6 +25,9 @@ public class Member {
 	private String name;
 	private String adminYN;
 	private int age;
+	
+	// 사용자 권한
+	private List<String> role;
 	
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private Date dueDate;

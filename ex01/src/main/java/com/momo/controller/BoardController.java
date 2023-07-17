@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,11 +62,17 @@ public class BoardController {
 	@GetMapping("list")
 	public void getList(Model model, Criteria cri) {
 //		List<BoardVO> list = boardService.getListXml(cri, model);
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start();
+		
 		log.info("cri : " + cri);
 		boardService.getListXml(cri, model);
 		//log.info("========================");
 		//log.info(list);
 		//model.addAttribute("list", list);
+		
+		stopWatch.stop();
+		log.info("수행시간 : " + stopWatch.getTotalTimeMillis() + "(ms)초");
 
 	}
 
@@ -118,17 +125,18 @@ public class BoardController {
 	public String editPost(BoardVO board, Model model, RedirectAttributes rttr, Criteria cri) { 
 	int res = boardService.update(board);
   
-	if(res > 0) {
-		model.addAttribute("board", board);
-		model.addAttribute("message", board.getBno() + "번 게시물 수정 완료");
-//		model.addAttribute("cri", cri);
-		return "/board/view";
-		// return "/board/view?bno=" + board.getBno(); /// 안됨
-  
-	} else { 
-		model.addAttribute("message", "수정 중 예외 발생");
+		if(res > 0) {
+			model.addAttribute("board", board);
+			model.addAttribute("message", board.getBno() + "번 게시물 수정 완료");
+	//		model.addAttribute("cri", cri);
+			return "/board/view";
+			// return "/board/view?bno=" + board.getBno(); /// 안됨
 	  
-	  	return "/board/message"; }
+		} else { 
+			model.addAttribute("message", "수정 중 예외 발생");
+		  
+		  	return "/board/message"; 
+	  	}
 	  
 	}
 	

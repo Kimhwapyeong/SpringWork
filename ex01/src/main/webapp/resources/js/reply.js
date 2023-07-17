@@ -31,7 +31,9 @@ function fetchPost(url, obj, callback){
 
 function getReplyList(page) {
 	/// 댓글 수정, 삭제 후에도 페이지를 유지하기 위해 
-	document.querySelector("#page").value = page;
+	document.querySelector("#page").value = page;    /// 이 코드를 넣었다가 처음 view 호출 시
+													/// page value에 'undefined' 문자열로 삽입되어
+													/// 댓글 삭제 후 댓글 페이지를 로드하지 못하였다.
 	/*
 	 * falsey : false, 0, "", NaN, undefined, null
 	 * falsey한 값 이외의 값이 들어 있으면 true를 반환
@@ -43,6 +45,11 @@ function getReplyList(page) {
 	if(!page){
 		page = 1
 	}
+	
+//	/// 처음 페이지를 열면 page가 undefined가 되어 댓글 삭제 후 페이지를 출력하지 못했다.
+//	if(page == 'undefined'){			
+//		page = 1
+//	}
 	
 	let bno = document.querySelector("#bno").value;
 	/*let page = document.querySelector("#page").value;*/
@@ -98,7 +105,7 @@ function replyView(map) {
 						<span class="tooltip-text">수정</span></i></a>
 						<a href="#none">
 						<i class="fa-solid fa-trash tooltip-1" onclick="replyDelete(${reply.rno})">
-						<span class="tooltip-text">삭제</span></i></a></td>  `
+						<span class="tooltip-text">삭제</span></i></a></td>	`
 				
 				+`      <td>${reply.replyer}</td>   `
 				
@@ -201,7 +208,7 @@ function replyRes(map){
 		// 성공 : 리스트 조회 및 출력
 		/// 댓글 수정, 삭제 후 현재 페이지 유지
 		let page = document.querySelector("#page").value
-		getReplyList(page);
+		getReplyList(page);  ///
 	} else {
 		// 실패 : 메시지 출력
 		alert(map.message);

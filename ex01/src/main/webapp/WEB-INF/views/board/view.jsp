@@ -57,7 +57,7 @@
 		});
 		
 		// 댓글 목록 조회 및 출력
-		getReplyList();
+		getReplyList(1);
 	});
 
 /* 	function requestAction(url) {
@@ -109,12 +109,16 @@
 	  <label for="writer" class="form-label">작성자</label>
 	  <input name="writer" type="text" class="form-control" id="writer" value="${board.writer }" readonly>
 	</div>
+	<c:if test="${ userId != board.writer }">
+		<c:set value="disabled" var="disabled"></c:set>
+	</c:if>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-center">
-		<button type="button" class="btn btn-primary btn-lg" id="btnEdit">수정하기</button>
+		<button type="button" class="btn btn-primary btn-lg ${ disabled }" id="btnEdit">수정하기</button>
 		<!-- <button type="button" class="btn btn-primary btn-lg" id="btnEdit" onclick="requestAction('/board/edit')">수정하기</button> -->
-		<button type="button" class="btn btn-secondary btn-lg" id="btnDelete">삭제하기</button>
+		<button type="button" class="btn btn-secondary btn-lg ${ disabled }" id="btnDelete">삭제하기</button>
 		<!-- <button type="button" class="btn btn-secondary btn-lg" id="btnDelete" onclick="requestAction('/board/delete')">삭제하기</button> -->
 	</div>
+	
 </form>
 <p></p>
 <!-- 댓글 리스트 -->
