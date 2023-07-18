@@ -60,7 +60,7 @@ public class FileuploadController {
 	public String fileuploadAction(List<MultipartFile> files, int bno, RedirectAttributes rttr) {
 
 		int insertRes = 0;
-//		files.forEach(file ->{
+//		files.forEach(file ->{   /// forEach를 사용하면 밖에서 선언된 변수에 접근 불가하여 변경
 		for(MultipartFile file : files) {
 			// 선택된 파일이 없는 경우 다음 파일로 이동
 			if(file.isEmpty()) {
