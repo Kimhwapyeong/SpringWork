@@ -29,6 +29,11 @@ import lombok.extern.log4j.Log4j;
  * 		애플리케이션에서 공통적으로 처리해야 하는 기능
  * 		오류 발생 시 데이터 베이스에 저장
  * 
+ * Aspect
+ * 		부가적인 관심사를 모듈화한 단위
+ * 		(Advice를 그룹화)Cross Concern : 횡단관심사
+ * 		주 업무로직 이외의 부가적인 로직
+ * 
  * Advice
  * 		부가적인 관심사
  * 
@@ -45,7 +50,7 @@ import lombok.extern.log4j.Log4j;
  * @author user
  *
  */
-@Aspect
+@Aspect   /// advice 어노테이션
 @Log4j
 @Component
 public class LogAdvice {
@@ -56,6 +61,7 @@ public class LogAdvice {
 	 * Before
 	 * 		타겟 객체의 메소드가 실행되기 전에 호출되는 어드바이스
 	 * 		JoinPonit를 통해 파라미터 정보 참조 가능
+	 * 			
 	 */
 	@Before("execution(* com.momo.service.Board*.*(..))")
 	public void logBefore() {
@@ -72,7 +78,7 @@ public class LogAdvice {
 		log.info("================ AOP ==============");
 		log.info("Param : " + Arrays.toString(joinpoint.getArgs()));
 		log.info("Target : " + joinpoint.getTarget());
-		log.info("Method : " + joinpoint.getSignature());   /// 메서드 정보
+		log.info("Method : " + joinpoint.getSignature().getName());   /// 메서드 정보
 	}
 	
 	/**
@@ -82,6 +88,7 @@ public class LogAdvice {
 	 * 
 	 * 		주업무로직을 실행하기 위해 JoinPoint의 하위 클래스인
 	 * 		ProceedingJoinPoint타입의 파라미터를 필수적으로 선언해야 함
+	 * 		타겟메소드를 실행하고 결과를 반환하기 위해!!
 	 */
 //	@Around("execution(* com.momo.service.Board*.*(..))")
 //	public Object logTime(ProceedingJoinPoint pjp) {

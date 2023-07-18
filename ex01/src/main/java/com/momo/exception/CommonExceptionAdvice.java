@@ -27,6 +27,7 @@ public class CommonExceptionAdvice {
 	@ExceptionHandler(Exception.class)
 	public String except(Exception ex, Model model) {
 		System.out.println("Exception....." + ex.getMessage());
+		ex.printStackTrace();
 		log.info("Exception.....");
 		log.debug("로그 테스트 + debug");
 		log.error("로그 테스트 + error");

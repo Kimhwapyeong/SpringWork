@@ -58,6 +58,12 @@
 		
 		// 댓글 목록 조회 및 출력
 		getReplyList(1);
+		
+		/// 세션에 등록된 아이디와 작성자가 일치하지 않으면 수정, 삭제 버튼 숨김
+		if('${userId}' != '${board.writer}'){
+			btnEdit.style.display = 'none';
+			btnDelete.style.display = 'none';
+		}
 	});
 
 /* 	function requestAction(url) {
@@ -109,6 +115,7 @@
 	  <label for="writer" class="form-label">작성자</label>
 	  <input name="writer" type="text" class="form-control" id="writer" value="${board.writer }" readonly>
 	</div>
+	<!-- / 자바스크립트로 처리하였기 때문에 아래 if문은 필요 없어짐 -->
 	<c:if test="${ userId != board.writer }">
 		<c:set value="disabled" var="disabled"></c:set>
 	</c:if>

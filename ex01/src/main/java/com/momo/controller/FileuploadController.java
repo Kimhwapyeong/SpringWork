@@ -1,31 +1,34 @@
 package com.momo.controller;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.momo.service.FileuploadService;
+import com.momo.vo.FileuploadVO;
+
+import lombok.extern.log4j.Log4j;
+import net.coobird.thumbnailator.Thumbnails;
 
 @Controller
+@Log4j
 public class FileuploadController {
-	
-	/**
-	 * 메서드의 리턴 타입
-	 * 
-	 * 	String
-	 * 		/WEB-INF/views/반환값.jsp 응답페이지 주소
-	 * 		servlet-context.xml에 정의되어 있습니다.ㅣ
-	 * 
-	 * 	void
-	 * 		요청주소와 동일한 이름의 jsp를 반환
-	 */
-	
-	@GetMapping("/file/fileupload")
-	public void fileupload() {
 		
-	}
-	
 	/**
 	 * 파일 업로드용 라이브러리 추가
 	 * commons-fileupload
@@ -36,14 +39,148 @@ public class FileuploadController {
 	 * 2. multpartResolver 빈 등록
 	 * 3. 메서드의 매개변수로 MultipartFile이용
 	 */
-	@PostMapping("/file/fileupload")
-	public void fileuploadAction(ArrayList<MultipartFile> files) {
-		files.forEach(file -> {
-			System.out.println("=====================================");
-			System.out.println("oname : " + file.getOriginalFilename());
-			System.out.println("name : " + file.getName());
-			System.out.println("size : " + file.getSize());
-			System.out.println("=====================================");
-		});
+
+	@GetMapping("/file/fileupload")
+	public void fileupload() {
+		
+	}
+	
+	private static final String ATTACHES_DIR = "c:\\upload\\tmp\\";
+	
+	/**
+	 * 오류가 나는 경우
+	 *  - 전달된 파일이 없는 경우
+	 * 	- enctype="multipart/form-data" 오타가 있을 때
+	 * 	- 설정이 안되었을 때
+	 * 		라이브러리 추가, 빈 등록
+	 * @param files
+	 * @return
+	 */
+	@PostMapping("/file/fileuploadAction")
+	public String fileuploadAction(List<MultipartFile> files, int bno, RedirectAttributes rttr) {
+
+		int insertRes = 0;
+//		files.forEach(file ->{
+		for(MultipartFile file : files) {
+			// 선택된 파일이 없는 경우 다음 파일로 이동
+			if(file.isEmpty()) {
+				/// 현재 파일 선택창을 3개를 놨는데, 1, 3번만 파일을 선택할 수 있기 때문에
+				/// return이 아니고 continue를 쓴다.
+				continue;
+			}
+			
+			log.info("oFileName : " + file.getOriginalFilename());
+			log.info("name : " + file.getName());
+			log.info("size : " + file.getSize());
+			try {
+				//UUID
+				/*
+				 * 소프트웨어 구축에 쓰이는 식별자 표준 
+				 * 파일이름이 중복되어 파일이 소실되지 않도록 uuid를 붙여서 저장
+				 * 굉장히 드물게 같은 id가 나올 수 있음
+				 */
+				UUID uuid = UUID.randomUUID();
+				String saveFileName = uuid + "_" + file.getOriginalFilename();
+				File sFile = new File(ATTACHES_DIR + getFolder() + saveFileName);
+				
+				// file(원본파일) sFile(저장할 대상 파일)에 저장
+				file.transferTo(sFile);
+
+				FileuploadVO vo = new FileuploadVO();
+				// 주어진 파일의 Mime유형
+				String contentType =
+							Files.probeContentType(sFile.toPath());
+				
+				// Mime타입을 확인하여 이미지인 경우 썸네일을 생성
+					/// null 체크를 하지 않으면 사진 파일이 아닌 파일을 업로드 했을 경우 NullpointerException 발생
+				if(contentType != null && contentType.startsWith("image")) {
+					vo.setFiletype("I");
+					// 썸네일 생성 경로
+					String thmbnail = ATTACHES_DIR + getFolder() + "s_" + saveFileName;
+					// 썸네일 생성
+					// 원본파일, 크기, 저장될 경로
+					Thumbnails.of(sFile).size(100, 100).toFile(thmbnail);
+				} else {
+					vo.setFiletype("F");
+				}
+				
+				vo.setBno(bno);
+				vo.setFilename(file.getOriginalFilename());
+				vo.setUploadpath(getFolder());
+				vo.setUuid(uuid.toString());
+				
+				int res = service.insert(vo);
+				
+				if(res>0) {
+					insertRes++;
+				}
+				
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+//		});
+		/// 메시지를 String으로 저장해서 쿼리스트링으로 넘겨주면 한글 깨짐
+		rttr.addFlashAttribute("message", insertRes + "건 저장되었습니다");
+		return "redirect:/file/fileupload";
+	}
+	
+	@Autowired
+	FileuploadService service;
+	
+	@GetMapping("/file/list/{bno}")
+	public @ResponseBody Map<String, Object> fileuploadList(@PathVariable("bno") int bno) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", service.getList(bno));
+		
+		return map;
+	}
+	
+	// 중복 방지용 
+	// 		업로드 날짜를 폴더 이름으로 사용
+	//		2023/07/18
+	public String getFolder() {
+		LocalDate currentDate = LocalDate.now();	                       
+		String uploadPath = currentDate.toString().replace("-", File.separator) + File.separator;
+															/// 마지막 구분자를 넣어주지 않으면 경로로 인식하지 못하고, 마지막 일(day)이 파일명으로 등록 됨
+		log.info("currentDate : " + currentDate);
+		log.info("경로 : " + uploadPath);
+		
+		// 폴더 생성(없으면)
+		File saveDir = new File(ATTACHES_DIR + uploadPath);
+		if(!saveDir.exists()) {
+			if(saveDir.mkdirs()) {
+				log.info("폴더 생성!!!");
+			}else {
+				log.info("폴더 생성 실패!!");
+			}
+		}
+		return uploadPath;
+	}
+	
+	public static void main(String[] args) {
+		LocalDate currentDate = LocalDate.now();
+		String uploadPath = currentDate.toString().replace("-", File.separator) + File.separator;
+
+		System.out.println("currentDate : " + currentDate);
+		System.out.println("경로 : " + uploadPath);
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

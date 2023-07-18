@@ -27,14 +27,14 @@
 	<interceptors>
 		<!-- 로그인 체크 -->
 		<interceptor>
-			<mapping path="/board/*"/>
-			<exclude-mapping path=""/>
+			<mapping path="/board/*"/>	<!-- 그냥 *로 주면 interceptor에서 login으로 보내주기 때문에 login에 무한 루프에 빠진다. -->
+			<exclude-mapping path=""/>   <!-- / 제외할 경로 -->
 			<beans:ref bean="loginInterceptor"/>
 		</interceptor>
 		
 		<!-- 관리자 체크 -->
 		<interceptor>
-			<mapping path="/admin**"/>
+			<mapping path="/admin**"/>  <!-- / ** : 하위 경로를 포함하겠다 -->
 			<exclude-mapping path=""/>
 			<beans:ref bean="adminInterceptor"/> 
 		</interceptor>

@@ -36,12 +36,13 @@ public class LoginInterceptor implements HandlerInterceptor{
 						&& !session.getAttribute("userId").equals("")) {
 			return true;
 		} else {
+										/// interceptor에서는 한글처리가 자동으로 되지 않는다
 			String msg = URLEncoder.encode("로그인 후 사용 가능한 메뉴 입니다.", "utf-8");
 			
 			response.sendRedirect("/login?msg="+msg);
+			return false;
 		}
 		
-		return HandlerInterceptor.super.preHandle(request, response, handler);
 	}
 	
 }
