@@ -86,11 +86,13 @@
 		// /file/list/{bno}
 		/// let bno = 으로 변수를 선언하게 되면 호이스팅에 의해 변수를 미리 생성하고
 		/// bno 에 undefined가 저장되어 id bno로 접근 할 수 없게 되어 value를 가져올 수 없다.
-		/// 하지만 그냥 bno로 하게되면 호이스팅 되지 않아 저장 가능?
-		bno = bno.value;
+		/// 하지만 그냥 bno로 하게되면 호이스팅 되지 않아 저장 가능? / 하지만 재 호출 시 다시 저장 되면 bno(bno값).value가 되어
+											// 에러가 난다. 따라서 document로 하거나 변수 이름을 다르게 하거나.
+		bno = document.querySelector("#bno").value;
 		fetch('/file/list/'+bno)
 			.then(response => response.json())
-			.then(map => viewFileList(map))
+			.then(map => viewFileList(map))   /// 콜백 함수를 익명의 함수로 생성한다면 map => () =>{}로 하면 안됨
+											///  (map) => {} 으로 바로 생성해주어야 함
 	}
 	
 	function viewFileList(map){
