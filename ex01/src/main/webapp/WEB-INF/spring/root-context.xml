@@ -40,9 +40,9 @@
 	<!-- commons-fileupload, io 를 maven 세팅 필요 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	    <property name="defaultEncoding" value="utf-8"></property>
-	    <!-- 1024 * 1024 * 10 bytes  10MB -->
+	    <!-- 1024 * 1024 * 10 bytes  10MB -->  <!-- / 전체 요청에 대한 최대 업로드 파일 크기 -->
 	    <property name="maxUploadSize" value="104857560"></property>
-	    <!-- 1024 * 1024 * 2 bytes  2MB -->
+	    <!-- 1024 * 1024 * 2 bytes  2MB --> <!-- / 개별 파일 업로드 파일 크기-->
 	    <property name="maxUploadSizePerFile" value="2097152"></property>
 	    <property name="uploadTempDir" value ="file:/C:/upload/tmp"></property>
 	    <property name="maxInMemorySize" value="10485756"></property>

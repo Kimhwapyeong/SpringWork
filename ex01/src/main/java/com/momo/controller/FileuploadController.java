@@ -27,7 +27,7 @@ import net.coobird.thumbnailator.Thumbnails;
 
 @Controller
 @Log4j
-public class FileuploadController {
+public class FileuploadController extends CommonRestController{
 		
 	/**
 	 * 파일 업로드용 라이브러리 추가
@@ -59,8 +59,76 @@ public class FileuploadController {
 	@PostMapping("/file/fileuploadAction")
 	public String fileuploadAction(List<MultipartFile> files, int bno, RedirectAttributes rttr) {
 
-		int insertRes = 0;
+		int insertRes = fileupload(files, bno);
 //		files.forEach(file ->{   /// forEach를 사용하면 밖에서 선언된 변수에 접근 불가하여 변경
+		
+//		});
+		/// 메시지를 String으로 저장해서 쿼리스트링으로 넘겨주면 한글 깨짐
+		rttr.addFlashAttribute("message", insertRes + "건 저장되었습니다");
+		return "redirect:/file/fileupload";
+	}
+
+	@PostMapping("/file/fileuploadActionFetch")
+	public @ResponseBody Map<String, Object> fileuploadAction(List<MultipartFile> files, int bno) {
+		
+		log.info("fileuploadActionFetch");
+		int insertRes = fileupload(files, bno);
+		log.info("업로드 건수 : " + insertRes);
+		return responseMap("success", insertRes + "건 저장되었습니다.");
+	}
+	
+
+	
+	@Autowired
+	FileuploadService service;
+	
+	@GetMapping("/file/list/{bno}")
+	public @ResponseBody Map<String, Object> fileuploadList(@PathVariable("bno") int bno) {
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", service.getList(bno));
+		
+		return map;
+	}
+	
+	// 중복 방지용 
+	// 		업로드 날짜를 폴더 이름으로 사용
+	//		2023/07/18
+	public String getFolder() {
+		LocalDate currentDate = LocalDate.now();	                       
+		String uploadPath = currentDate.toString().replace("-", File.separator) + File.separator;
+															/// 마지막 구분자를 넣어주지 않으면 경로로 인식하지 못하고, 마지막 일(day)이 파일명으로 등록 됨
+		log.info("currentDate : " + currentDate);
+		log.info("경로 : " + uploadPath);
+		
+		// 폴더 생성(없으면)
+		File saveDir = new File(ATTACHES_DIR + uploadPath);
+		if(!saveDir.exists()) {
+			if(saveDir.mkdirs()) {
+				log.info("폴더 생성!!!");
+			}else {
+				log.info("폴더 생성 실패!!");
+			}
+		}
+		return uploadPath;
+	}
+	
+	public static void main(String[] args) {
+		LocalDate currentDate = LocalDate.now();
+		String uploadPath = currentDate.toString().replace("-", File.separator) + File.separator;
+
+		System.out.println("currentDate : " + currentDate);
+		System.out.println("경로 : " + uploadPath);
+	}
+	
+	/**
+	 * 첨부파일 저장 및 데이터 베이스에 등록
+	 * @param files
+	 * @param bno
+	 * @return
+	 */
+	public int fileupload(List<MultipartFile> files, int bno) {
+		int insertRes = 0;
 		for(MultipartFile file : files) {
 			// 선택된 파일이 없는 경우 다음 파일로 이동
 			if(file.isEmpty()) {
@@ -122,54 +190,8 @@ public class FileuploadController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 		}
-//		});
-		/// 메시지를 String으로 저장해서 쿼리스트링으로 넘겨주면 한글 깨짐
-		rttr.addFlashAttribute("message", insertRes + "건 저장되었습니다");
-		return "redirect:/file/fileupload";
-	}
-	
-	@Autowired
-	FileuploadService service;
-	
-	@GetMapping("/file/list/{bno}")
-	public @ResponseBody Map<String, Object> fileuploadList(@PathVariable("bno") int bno) {
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("list", service.getList(bno));
-		
-		return map;
-	}
-	
-	// 중복 방지용 
-	// 		업로드 날짜를 폴더 이름으로 사용
-	//		2023/07/18
-	public String getFolder() {
-		LocalDate currentDate = LocalDate.now();	                       
-		String uploadPath = currentDate.toString().replace("-", File.separator) + File.separator;
-															/// 마지막 구분자를 넣어주지 않으면 경로로 인식하지 못하고, 마지막 일(day)이 파일명으로 등록 됨
-		log.info("currentDate : " + currentDate);
-		log.info("경로 : " + uploadPath);
-		
-		// 폴더 생성(없으면)
-		File saveDir = new File(ATTACHES_DIR + uploadPath);
-		if(!saveDir.exists()) {
-			if(saveDir.mkdirs()) {
-				log.info("폴더 생성!!!");
-			}else {
-				log.info("폴더 생성 실패!!");
-			}
-		}
-		return uploadPath;
-	}
-	
-	public static void main(String[] args) {
-		LocalDate currentDate = LocalDate.now();
-		String uploadPath = currentDate.toString().replace("-", File.separator) + File.separator;
-
-		System.out.println("currentDate : " + currentDate);
-		System.out.println("경로 : " + uploadPath);
+		return insertRes;
 	}
 }
 
