@@ -34,16 +34,17 @@ function getReplyList(page) {
 	document.querySelector("#page").value = page;    /// 이 코드를 넣었다가 처음 view 호출 시
 													/// page value에 'undefined' 문자열로 삽입되어
 													/// 댓글 삭제 후 댓글 페이지를 로드하지 못하였다.
+													/// view load 이벤트에서 getReplyList에 파라메터 1을 주어 해결
 	/*
 	 * falsey : false, 0, "", NaN, undefined, null
 	 * falsey한 값 이외의 값이 들어 있으면 true를 반환
 	 * 
 	 * page에 입력된 값이 없으면 1을 세팅
 	 */
-	/// 하였으나 수정, 삭제 후 현재 페이지 유지를 위해 input:ip=page를 넣고, 기본값을 1을 주었기 때문에
+	/// 하였으나 수정, 삭제 후 현재 페이지 유지를 위해 id=page에 매개변수 page를 넣고, 기본값을 1을 주었기 때문에
 	/// 이 코드는 맨 처음 페이지를 출력할 때만 사용된다. 그 때도 page.value 값을 넣어주면 지워도 됨.
 	if(!page){
-		page = 1
+		page = 1    /// 처음 view 페이지 호출 시 파라메터로 1을 넣어주기 때문에 사용되지 않음
 	}
 	
 //	/// 처음 페이지를 열면 page가 undefined가 되어 댓글 삭제 후 페이지를 출력하지 못했다.
@@ -95,19 +96,27 @@ function replyView(map) {
 	} else {
 		/// 리스트가 있으면 반복하여 출력
 		list.forEach((reply, i) => {
+			/// 세션영역에 등록된 userId는 jsp 밖에서 작성된 js에서 접근하지 못한다. (있을 수 있지만 나는 모른다)
+			/// 그래서 view.jsp에 hidden 으로 userId를 value로 갖는 input을 만들어서 읽어왔다.
+			/// 정말 오래 고민했는데, 나름 쉬운 해결책이었다
+			let userId = document.querySelector("#userId").value;
 			replyBox += ''
 				+`    <tr id="tr${reply.rno}" data-reply="${reply.reply}">      `
 				+`      <td scope="row">${reply.rn}</td> ` /// ReplyVO에 rn필드를 넣어줌.
 				
 				+`      <td class="text-start">${reply.reply} 
-						<a href="#none" id="tip${reply.rno}">
-						<i class="fa-regular fa-pen-to-square tooltip-1" onclick="replyEdit(${reply.rno})">
+						<a href="#none" id="tip${reply.rno}">`
+				
+				if(userId == reply.replyer){
+					replyBox +=
+						`<i class="fa-regular fa-pen-to-square tooltip-1" onclick="replyEdit(${reply.rno})">
 						<span class="tooltip-text">수정</span></i></a>
 						<a href="#none">
 						<i class="fa-solid fa-trash tooltip-1" onclick="replyDelete(${reply.rno})">
 						<span class="tooltip-text">삭제</span></i></a></td>	`
-				
-				+`      <td>${reply.replyer}</td>   `
+				}
+				replyBox +=
+				`      <td>${reply.replyer}</td>   `
 				
 				+`      <td>${reply.updatedate}</td>`
 				+'    </tr>                         ';

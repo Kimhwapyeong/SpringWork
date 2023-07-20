@@ -184,6 +184,8 @@
 	</div>
 	
 </form>
+<!-- js파일에서 세션에 저장된 userId를 사용하기 위한 input값이다. 이 값으로 댓글 수정, 삭제에 대한 권한을 주었다. -->
+<input type="hidden" id="userId" value="${ userId }">
 <p></p>
 <button id=btnFileList>첨부파일 보기</button>
 <div id="fileList"></div>
