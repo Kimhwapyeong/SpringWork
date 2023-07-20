@@ -80,6 +80,11 @@
 	function viewFileList(map){
 		console.log('viewFileListParamMap', map);
 		let content = '';
+		
+		let userId = '${userId}';
+		let writer = '${board.writer}';
+		console.log('userId', userId);
+		console.log('writer', writer);
 		if(map.list.length>0){
 			map.list.forEach(function(item, index){
 				/// url에 사용되는 기호들 때문에(url에서 사용될 수 없는 기호가 savePath에 있을 수 있어서) uri 인코더를 사용해야 함.
@@ -88,14 +93,34 @@
 						
 					/////////////
 						+ '🎃'+ item.filename + '</a>'
-						+ '<c:if test="' + ${userId} + ' = ' + ${board.writer} + '"> <i onclick="attachFileDelete(this)"' 
-						+ 'class="fa-solid fa-square-xmark" data-bno="' + item.bno + '" data-uuid="' + item.uuid + '"></i></c:if>'	
-						+ '<br>';
+						if('${userId}' == '${board.writer}'){
+						content
+						+= '<i onclick="attachFileDelete(this)"' 
+						+ 'class="fa-solid fa-square-xmark" data-bno="' + item.bno + '" data-uuid="' + item.uuid + '"></i>'	
+						}
+						content
+						+= '<br>';
 			})		
 		} else {
 			content = '등록된 파일이 없습니다.';
 		}
 		fileList.innerHTML = content;
+	}
+	
+	function attachFileDelete(e){
+		let bno = e.dataset.bno;
+		let uuid = e.dataset.uuid;
+		
+		fetch(`/file/delete/\${bno}/\${uuid}`)
+			.then(response => response.json())
+			.then(map => fileDeleteRes(map))
+	}
+	
+	function fileDeleteRes(map){
+		console.log(map);
+		if(map.result == 'success'){
+			getFileList();
+		}
 	}
 
 /* 	function requestAction(url) {
@@ -106,8 +131,8 @@
 </script>
 </head>
 <body>
-
 <jsp:include page="../common/header.jsp"/>
+<c:if test="${'a' eq 'b'}"><p>glglglgl</p></c:if>
 <main class="container">
 <div class="bg-light p-5 rounded">
 	<div class="d-grid gap-2 d-md-flex justify-content-md-center">
