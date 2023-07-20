@@ -60,7 +60,7 @@
 <p></p>
 <div class="list-group w-auto">
 
-	<form name="writeForm" method="post">
+	<form name="writeForm" method="post" enctype="multipart/form-data">
 		<!-- 검색유지 -->
 		<input type="hidden" name="pageNo" value="${ param.pageNo }">
 		<input type="hidden" name="searchField" value="${param.searchField }">
@@ -78,6 +78,10 @@
 		  <label for="writer" class="form-label">작성자</label>
 		  <input name="writer" type="text" class="form-control" id="writer" value=${userId }
 		  						${ not res?"readonly":"" }>
+		</div>
+		<div class="mb-3">
+		  <label for="files" class="form-label">첨부파일</label>
+		  <input name="files" type="file" class="form-control" id="files" multiple>
 		</div>
 		<div class="d-grid gap-2 d-md-flex justify-content-md-center">
 			<!-- board가 없으면 글쓰기 -->

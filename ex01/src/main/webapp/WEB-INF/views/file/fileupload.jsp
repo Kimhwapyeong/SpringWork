@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://kit.fontawesome.com/362f754739.js" crossorigin="anonymous"></script>
 <script type="text/javascript">
 	window.addEventListener('load',()=>{
 		btnList.addEventListener('click', ()=>{
@@ -79,16 +80,19 @@
 	function fileuploadRes(map){
 		if(map.result == 'success'){
 			divFileuploadRes.innerHTML = map.message;
+		} else {
+			alert(map.message);
 		}
 	}
 
 	function getFileList(){
 		// /file/list/{bno}
-		/// let bno = 으로 변수를 선언하게 되면 호이스팅에 의해 변수를 미리 생성하고
+		/// let bno = 으로 변수를 선언하게 되면 호이스팅(호이스팅 아니고 어떤 영역에 저장)에 의해 변수를 미리 생성하고
 		/// bno 에 undefined가 저장되어 id bno로 접근 할 수 없게 되어 value를 가져올 수 없다.
 		/// 하지만 그냥 bno로 하게되면 호이스팅 되지 않아 저장 가능? / 하지만 재 호출 시 다시 저장 되면 bno(bno값).value가 되어
 											// 에러가 난다. 따라서 document로 하거나 변수 이름을 다르게 하거나.
 		let bno = document.querySelector("#bno").value;
+		//bno = bno.value;
 		fetch('/file/list/'+bno)
 			.then(response => response.json())
 			.then(map => viewFileList(map))   /// 콜백 함수를 익명의 함수로 생성한다면 map => () =>{}로 하면 안됨
@@ -100,12 +104,45 @@
 		let content = '';
 		if(map.list.length>0){
 			map.list.forEach(function(item, index){
-				content += '🎃'+ item.filename + '<br>';
+				/// url에 사용되는 기호들 때문에(url에서 사용될 수 없는 기호가 savePath에 있을 수 있어서) uri 인코더를 사용해야 함.
+				let savePath = encodeURIComponent(item.savePath);
+				content += '<a href="/file/download?fileName=' + savePath + '" style="text-decoration:none; color:black">' 
+						+ '🎃'+ item.filename + '</a>'
+						+ ' <i onclick="attachFileDelete(this)" class="fa-solid fa-square-xmark" data-bno="' + item.bno + '" data-uuid="' + item.uuid + '"></i>'	
+						+ '<br>';
 			})		
 		} else {
 			content = '등록된 파일이 없습니다.';
 		}
 		fileList.innerHTML = content;
+	}
+	
+	function attachFileDelete(e){
+/* 		if(e.dataset.uuid != ''){
+			
+			fetch('/file/delete/'+e.dataset.bno+'/'+e.dataset.uuid)
+				.then(response => response.json())
+				.then(map => fileRes(map))
+		} */
+		
+		let bno = e.dataset.bno;
+		let uuid = e.dataset.uuid;
+		//값이 유효하지 않은 경우 메시지 처리
+		// fetch 요청
+		// el 표현식 -> \${ } (el 표현식으로 처리하지 않음) /// el태그는 주석처리 안됨?
+		fetch(`/file/delete/\${bno}/\${uuid}`)  /// jsp에서 백틱을 사용할 때에는 $ 앞에 \ 를 추가해주어야 한다. el과 충돌
+			.then(response => response.json())
+			.then(map => fileDeleteRes(map));
+	}
+	
+	// 삭제 결과 처리
+	function fileDeleteRes(map){
+		console.log(map);
+		if(map.result == 'success'){
+			getFileList();
+		} else {
+			alert(map.message);
+		}
 	}
 </script>
 </head>

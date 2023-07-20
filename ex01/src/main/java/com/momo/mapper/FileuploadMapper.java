@@ -14,4 +14,6 @@ public interface FileuploadMapper {
 	public List<FileuploadVO> getList(int bno);
 	
 	public int insert(FileuploadVO vo);
+	
+	public int delete(FileuploadVO vo);
 }

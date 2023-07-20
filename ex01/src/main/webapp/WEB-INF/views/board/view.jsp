@@ -64,7 +64,39 @@
 			btnEdit.style.display = 'none';
 			btnDelete.style.display = 'none';
 		}
+		
+		btnFileList.addEventListener('click', function(){
+			getFileList();
+		})
 	});
+	
+	function getFileList(){
+		let bno = document.querySelector("#bno").value;
+		fetch('/file/list/'+bno)
+			.then(response => response.json())
+			.then(map => viewFileList(map))
+	}
+	
+	function viewFileList(map){
+		console.log('viewFileListParamMap', map);
+		let content = '';
+		if(map.list.length>0){
+			map.list.forEach(function(item, index){
+				/// url에 사용되는 기호들 때문에(url에서 사용될 수 없는 기호가 savePath에 있을 수 있어서) uri 인코더를 사용해야 함.
+				let savePath = encodeURIComponent(item.savePath);
+				content += '<a href="/file/download?fileName=' + savePath + '" style="text-decoration:none; color:black">' 
+						
+					/////////////
+						+ '🎃'+ item.filename + '</a>'
+						+ '<c:if test="' + ${userId} + ' = ' + ${board.writer} + '"> <i onclick="attachFileDelete(this)"' 
+						+ 'class="fa-solid fa-square-xmark" data-bno="' + item.bno + '" data-uuid="' + item.uuid + '"></i></c:if>'	
+						+ '<br>';
+			})		
+		} else {
+			content = '등록된 파일이 없습니다.';
+		}
+		fileList.innerHTML = content;
+	}
 
 /* 	function requestAction(url) {
 		viewForm.action=url;
@@ -128,6 +160,8 @@
 	
 </form>
 <p></p>
+<button id=btnFileList>첨부파일 보기</button>
+<div id="fileList"></div>
 <!-- 댓글 리스트 -->
 <!-- 그냥 if문으로 답글작성 div를 감싸주게 되면 script에서 btnReplyWrite 버튼을 찾지 못해 오류가 발생한다. -->
 <c:if test="${ empty member }"> <!-- / 맴버가 비어있으면 -->

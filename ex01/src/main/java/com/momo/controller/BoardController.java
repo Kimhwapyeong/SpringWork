@@ -9,9 +9,11 @@ import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.momo.service.BoardService;
+import com.momo.service.FileuploadService;
 import com.momo.vo.BnoArr;
 import com.momo.vo.BoardVO;
 import com.momo.vo.Criteria;
@@ -25,6 +27,9 @@ public class BoardController {
 
 	@Autowired
 	BoardService boardService;
+	
+	@Autowired
+	FileuploadService fileuploadService;
 
 	@GetMapping("/reply/test")
 	public String test() {
@@ -98,14 +103,16 @@ public class BoardController {
 	 * 
 	 */
 	@PostMapping("write") /// redirect를 할 때에도 파라메터를 넘기기 위한 매개변수
-	public String writeAction(BoardVO board, Model model, RedirectAttributes rttr) {
+	public String writeAction(BoardVO board, Model model, RedirectAttributes rttr, List<MultipartFile> files) {
 		// 시퀀스 조회 후 시퀀스 번호를 bno에 저장
 		int res = boardService.insertSelectKey(board); /// 레퍼런스 값이라 bno가 살아서 온다?
 
 		if (res > 0) {
+			
+			int fileRes = fileuploadService.fileupload(files, Integer.parseInt(board.getBno()));
 			// url?message=등록.. (쿼리스트링으로 전달 -> param.message)
 			// rttr.addAttribute("message", "등록되었습니다."); /// 쿼리 스트링으로 전달됨
-
+			System.out.println("파일 업로드 : " + fileRes);
 			// 세션영역에 저장 -> message
 			// 새로고침시 유지되지 않음
 			rttr.addFlashAttribute("message", board.getBno() + "번 등록되었습니다.");
