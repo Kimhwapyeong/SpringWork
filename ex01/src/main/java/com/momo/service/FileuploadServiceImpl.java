@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.momo.controller.FileuploadController;
 import com.momo.mapper.FileuploadMapper;
 import com.momo.vo.FileuploadVO;
 
@@ -24,6 +25,8 @@ public class FileuploadServiceImpl implements FileuploadService{
 	@Autowired
 	FileuploadMapper mapper;
 	
+	public final String ATTACHES_DIR = "\\c:upload\\tmp\\";
+
 	@Override
 	public int insert(FileuploadVO vo) {
 		
@@ -37,22 +40,50 @@ public class FileuploadServiceImpl implements FileuploadService{
 	}
 
 	@Override
-	public int delete(FileuploadVO vo) {
+	public int delete(FileuploadVO paramVo) {
 		// 파일 삭제
+		// 삭제할 파일 조회
+		FileuploadVO vo = mapper.getOne(paramVo);
+		// 삭제할 파일 처리
+		String savePath = vo.getSavePath();
+		String s_savePath = vo.getS_savePath();
 		
+		if(savePath != null && !savePath.equals("")) {
+			File file = new File(ATTACHES_DIR + savePath);
+			
+			if(file.exists()) {
+				if(!file.delete()){
+					System.err.println("Path : " + savePath);
+					System.err.println("파일 삭제 실패!");
+					return 0;
+				};
+			}
+		}
+		
+		if(s_savePath != null && !s_savePath.equals("")) {
+			File file = new File(ATTACHES_DIR + savePath);
+			
+			if(file.exists()) {
+				if(!file.delete()){
+					System.err.println("Path : " + s_savePath);
+					System.err.println("파일 삭제 실패!");
+					return 0;
+				}
+			}
+		}
 		// 데이터 베이스에서 삭제
 		return mapper.delete(vo);
 	}
 	
-	public final String ATTACHES_DIR = "\\c:upload\\tmp\\";
 	
 	/**
 	 * 첨부파일 저장 및 데이터 베이스에 등록
 	 * @param files
 	 * @param bno
 	 * @return
+	 * @throws Exception 
 	 */
-	public int fileupload(List<MultipartFile> files, int bno) {
+	public int fileupload(List<MultipartFile> files, int bno) throws Exception {
 		int insertRes = 0;
 		for(MultipartFile file : files) {
 			// 선택된 파일이 없는 경우 다음 파일로 이동
@@ -111,9 +142,14 @@ public class FileuploadServiceImpl implements FileuploadService{
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new Exception("첨부파일 등록 중 예외사항이 발생하였습니다.(IllegalStateException)");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				throw new Exception("첨부파일 등록 중 예외사항이 발생하였습니다.(IOException)");
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new Exception("첨부파일 등록 중 예외사항이 발생하였습니다.(Exception)");
 			}
 		}
 		return insertRes;

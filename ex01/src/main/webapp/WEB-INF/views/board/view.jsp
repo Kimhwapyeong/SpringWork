@@ -59,15 +59,17 @@
 		// 댓글 목록 조회 및 출력
 		getReplyList(1);
 		
+		getFileList();
+		
 		/// 세션에 등록된 아이디와 작성자가 일치하지 않으면 수정, 삭제 버튼 숨김
 		if('${userId}' != '${board.writer}'){
 			btnEdit.style.display = 'none';
 			btnDelete.style.display = 'none';
 		}
 		
-		btnFileList.addEventListener('click', function(){
+/* 		btnFileList.addEventListener('click', function(){
 			getFileList();
-		})
+		}) */
 	});
 	
 	function getFileList(){
@@ -86,12 +88,16 @@
 		console.log('userId', userId);
 		console.log('writer', writer);
 		if(map.list.length>0){
+			content +=
+				'<div class="mb-3">'
+			    +  '<label for="attachFile" class="form-label">첨부파일 목록</label>'
+				+  '<div class="form-control" id="attachFile">'
+				
 			map.list.forEach(function(item, index){
 				/// url에 사용되는 기호들 때문에(url에서 사용될 수 없는 기호가 savePath에 있을 수 있어서) uri 인코더를 사용해야 함.
 				let savePath = encodeURIComponent(item.savePath);
 				content += '<a href="/file/download?fileName=' + savePath + '" style="text-decoration:none; color:black">' 
 						
-					/////////////
 						+ '🎃'+ item.filename + '</a>'
 						if('${userId}' == '${board.writer}'){
 						content
@@ -101,10 +107,18 @@
 						content
 						+= '<br>';
 			})		
+			content +=
+				   '</div>'
+				+'</div>'
 		} else {
-			content = '등록된 파일이 없습니다.';
+			content = 
+				'<div class="mb-3">'
+				+  '<div class="form-control">'
+				+  '등록된 파일이 없습니다.'
+				+  '</div>'
+				+'</div>';
 		}
-		fileList.innerHTML = content;
+		divFileupload.innerHTML = content;
 	}
 	
 	function attachFileDelete(e){
@@ -127,7 +141,7 @@
 		viewForm.action=url;
 		viewForm.submit();
 	} */
-	
+	//var userId = '${userId}';	
 </script>
 </head>
 <body>
@@ -172,6 +186,11 @@
 	  <label for="writer" class="form-label">작성자</label>
 	  <input name="writer" type="text" class="form-control" id="writer" value="${board.writer }" readonly>
 	</div>
+	
+	<!-- 첨부파일 -->
+	<div id="divFileupload">
+	</div>
+	
 	<!-- / 자바스크립트로 처리하였기 때문에 아래 if문은 필요 없어짐 -->
 	<c:if test="${ userId != board.writer }">
 		<c:set value="disabled" var="disabled"></c:set>
@@ -187,8 +206,6 @@
 <!-- js파일에서 세션에 저장된 userId를 사용하기 위한 input값이다. 이 값으로 댓글 수정, 삭제에 대한 권한을 주었다. -->
 <input type="hidden" id="userId" value="${ userId }">
 <p></p>
-<button id=btnFileList>첨부파일 보기</button>
-<div id="fileList"></div>
 <!-- 댓글 리스트 -->
 <!-- 그냥 if문으로 답글작성 div를 감싸주게 되면 script에서 btnReplyWrite 버튼을 찾지 못해 오류가 발생한다. -->
 <c:if test="${ empty member }"> <!-- / 맴버가 비어있으면 -->

@@ -103,48 +103,71 @@ public class BoardController {
 	 * 
 	 */
 	@PostMapping("write") /// redirect를 할 때에도 파라메터를 넘기기 위한 매개변수
-	public String writeAction(BoardVO board, Model model, RedirectAttributes rttr, List<MultipartFile> files) {
-		// 시퀀스 조회 후 시퀀스 번호를 bno에 저장
-		int res = boardService.insertSelectKey(board); /// 레퍼런스 값이라 bno가 살아서 온다?
-
-		if (res > 0) {
-			
-			int fileRes = fileuploadService.fileupload(files, Integer.parseInt(board.getBno()));
-			// url?message=등록.. (쿼리스트링으로 전달 -> param.message)
-			// rttr.addAttribute("message", "등록되었습니다."); /// 쿼리 스트링으로 전달됨
-			System.out.println("파일 업로드 : " + fileRes);
-			// 세션영역에 저장 -> message
-			// 새로고침시 유지되지 않음
-			rttr.addFlashAttribute("message", board.getBno() + "번 등록되었습니다.");
-			/// 페이지를 redirect 해주고 싶을 때 이렇게 하면 된다.
-			/// 그렇지 않으면 당연히 데이터를 받아오지 못하고 list 페이지를 출력하게 됨.
-			return "redirect:/board/list";
-
-		} else {
-			model.addAttribute("message", "등록 중 예외 발생");
+	public String writeAction(BoardVO board, Model model
+							, RedirectAttributes rttr, List<MultipartFile> files) {
+		//int res = boardService.insertSelectKey(board); /// 레퍼런스 값이라 bno가 살아서 온다?
+		int res;
+		try {
+			// 시퀀스 조회 후 시퀀스 번호를 bno에 저장
+			// 게시물 등록 및 파일 처리
+			res = boardService.insertSelectKey(board, files);
+		
+			if (res > 0) {
+				
+				//int fileRes = fileuploadService.fileupload(files, Integer.parseInt(board.getBno()));
+				// url?message=등록.. (쿼리스트링으로 전달 -> param.message)
+				// rttr.addAttribute("message", "등록되었습니다."); /// 쿼리 스트링으로 전달됨
+				//System.out.println("파일 업로드 : " + fileRes);
+				// 세션영역에 저장 -> message
+				// 새로고침시 유지되지 않음
+				rttr.addFlashAttribute("message", board.getBno() + "번 등록되었습니다.");
+				/// 페이지를 redirect 해주고 싶을 때 이렇게 하면 된다.
+				/// 그렇지 않으면 당연히 데이터를 받아오지 못하고 list 페이지를 출력하게 됨.
+				return "redirect:/board/list";
+				
+			} else {
+				model.addAttribute("message", "등록 중 예외 발생");
+				return "/board/message";
+			}
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			if(e.getMessage().indexOf("첨부파일")>-1){
+				model.addAttribute("message", e.getMessage());
+			} else {
+				model.addAttribute("message", "등록중 예외사항이 발생하였습니다.");
+			}
 			return "/board/message";
-		}
-
+		}	
 	}
 
 	
 	@PostMapping("edit") 
-	public String editPost(BoardVO board, Model model, RedirectAttributes rttr, Criteria cri) { 
-	int res = boardService.update(board);
-  
-		if(res > 0) {
-			model.addAttribute("board", board);
-			model.addAttribute("message", board.getBno() + "번 게시물 수정 완료");
-	//		model.addAttribute("cri", cri);
-			return "/board/view";
-			// return "/board/view?bno=" + board.getBno(); /// 안됨
-	  
-		} else { 
-			model.addAttribute("message", "수정 중 예외 발생");
-		  
-		  	return "/board/message"; 
-	  	}
-	  
+	public String editPost(BoardVO board, Model model, RedirectAttributes rttr
+								, Criteria cri, List<MultipartFile> files) { 
+		int res;
+		try {
+			res = boardService.update(board, files);
+			if(res > 0) {
+				model.addAttribute("board", board);
+				model.addAttribute("message", board.getBno() + "번 게시물 수정 완료");
+				//		model.addAttribute("cri", cri);
+				return "/board/view";
+				// return "/board/view?bno=" + board.getBno(); /// 안됨
+				
+			} else { 
+				model.addAttribute("message", "수정 중 예외 발생");
+				
+				return "/board/message"; 
+			}
+		} catch (Exception e) {
+			log.info(e.getMessage());
+			if(e.getMessage().indexOf("첨부파일")>-1){
+				model.addAttribute("message", e.getMessage());
+			} else {
+				model.addAttribute("message", "수정중 예외사항이 발생하였습니다.");
+			}
+			return "/board/message";
+		}
 	}
 	
 
@@ -155,13 +178,27 @@ public class BoardController {
 		return "/board/write";
 	}
 
+//	@GetMapping("delete")
+//	public String delete(BoardVO paramVO, Model model, RedirectAttributes rttr) {
+//		//System.out.println("getBno() : " + paramVO.getBno());
+//		String[] bnoArr = paramVO.getBno().split(",");
+//		BnoArr bnoArry = new BnoArr();
+//		bnoArry.setBnoArr(bnoArr);
+//		int res = boardService.delete(bnoArry);
+//		if(res > 0) {
+//			rttr.addFlashAttribute("message", paramVO.getBno() + "번 게시물 삭제 완료");
+//			return "redirect:/board/list";
+//		} else {
+//			model.addAttribute("message", "삭제 중 오류 발생");
+//			return "/board/message";
+//		}
+//		
+//	}
+	
 	@GetMapping("delete")
 	public String delete(BoardVO paramVO, Model model, RedirectAttributes rttr) {
 		//System.out.println("getBno() : " + paramVO.getBno());
-		String[] bnoArr = paramVO.getBno().split(",");
-		BnoArr bnoArry = new BnoArr();
-		bnoArry.setBnoArr(bnoArr);
-		int res = boardService.delete(bnoArry);
+		int res = boardService.deleteOne(Integer.parseInt(paramVO.getBno()));
 		if(res > 0) {
 			rttr.addFlashAttribute("message", paramVO.getBno() + "번 게시물 삭제 완료");
 			return "redirect:/board/list";
@@ -171,8 +208,7 @@ public class BoardController {
 		}
 		
 	}
-
-
+	
 
 	
 }

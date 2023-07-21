@@ -62,4 +62,14 @@ public class FileuploadMapperTest {
 		
 		assertEquals(1, res);
 	}
+	
+	@Test
+	public void getOne() {
+		FileuploadVO vo = new FileuploadVO(); 
+		vo.setBno(8);
+		vo.setUuid("12435b5d-4722-4fbb-922b-6e0b251f9f7b");
+		FileuploadVO vo2 = mapper.getOne(vo);
+		
+		assertNotNull(vo2);
+	}
 }

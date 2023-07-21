@@ -25,6 +25,8 @@ public interface BoardMapper {
 //	public int delete(String bno);
 	public int delete(BnoArr bnoArr);
 	
+	public int deleteOne(int bno);
+	
 	public int update(BoardVO board);
 	
 	public int getTotalCnt(Criteria cri);

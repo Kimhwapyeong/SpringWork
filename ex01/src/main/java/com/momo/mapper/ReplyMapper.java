@@ -18,6 +18,8 @@ public interface ReplyMapper {
 	 */
 	public List<ReplyVO> getList(@Param(value="bno")int bno, @Param(value="cri")Criteria cri);
 	
+	public List<ReplyVO> getListTotal(int bno);
+	
 	public int insert(ReplyVO replyVO);
 	
 	public int delete(int rno);

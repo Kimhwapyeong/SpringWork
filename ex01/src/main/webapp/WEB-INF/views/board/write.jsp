@@ -32,7 +32,67 @@
 			writeForm.method='get';
 			writeForm.submit();
 		})
+		
+		getFileList();
 	})
+	
+	function getFileList(){
+		let bno = '${board.bno}';
+		if(bno){
+			fetch('/file/list/'+bno)
+				.then(response => response.json())
+				.then(map => viewFileList(map))
+		}
+	}
+	
+	function viewFileList(map){
+		console.log('viewFileListParamMap', map);
+		let content = '';
+		
+		if(map.list.length>0){
+			content +=
+				'<div class="mb-3">'
+			    +  '<label for="attachFile" class="form-label">첨부파일 목록</label>'
+				+  '<div class="form-control" id="attachFile">'
+				
+			map.list.forEach(function(item, index){
+				/// url에 사용되는 기호들 때문에(url에서 사용될 수 없는 기호가 savePath에 있을 수 있어서) uri 인코더를 사용해야 함.
+				let savePath = encodeURIComponent(item.savePath);
+				content += '<a href="/file/download?fileName=' + savePath + '" style="text-decoration:none; color:black">' 
+						+ '🎃'+ item.filename + '</a>'
+						+ '<i onclick="attachFileDelete(this)"' 
+						+ 'class="fa-solid fa-square-xmark" data-bno="' + item.bno + '" data-uuid="' + item.uuid + '"></i>'	
+						+ '<br>';
+			})		
+			content +=
+				   '</div>'
+				+'</div>'
+		} else {
+			content = 
+				'<div class="mb-3">'
+				+  '<div class="form-control">'
+				+  '등록된 파일이 없습니다.'
+				+  '</div>'
+				+'</div>';
+		}
+		divFileupload.innerHTML = content;
+	}
+	
+	function attachFileDelete(e){
+		let bno = e.dataset.bno;
+		let uuid = e.dataset.uuid;
+		
+		fetch(`/file/delete/\${bno}/\${uuid}`)
+			.then(response => response.json())
+			.then(map => fileDeleteRes(map))
+	}
+	
+	function fileDeleteRes(map){
+		console.log(map);
+		if(map.result == 'success'){
+			getFileList();
+		}
+	}
 </script>
 </head>
 <body>
@@ -83,6 +143,10 @@
 		  <label for="files" class="form-label">첨부파일</label>
 		  <input name="files" type="file" class="form-control" id="files" multiple>
 		</div>
+		
+		<!-- 첨부파일 -->
+		<div id="divFileupload"></div>
+		
 		<div class="d-grid gap-2 d-md-flex justify-content-md-center">
 			<!-- board가 없으면 글쓰기 -->
 			<c:if test="${ res }">

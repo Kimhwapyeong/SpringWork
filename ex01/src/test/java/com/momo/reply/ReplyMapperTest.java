@@ -65,4 +65,11 @@ public class ReplyMapperTest {
 		
 		log.info("totalCnt : " + res);
 	}
+	
+	@Test
+	public void getListTotal() {
+		List<ReplyVO> list = mapper.getListTotal(8);
+		
+		log.info(list);
+	}
 }

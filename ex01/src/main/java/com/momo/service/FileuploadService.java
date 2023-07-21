@@ -16,7 +16,7 @@ public interface FileuploadService {
 	
 	public int delete(FileuploadVO vo);
 	
-	public int fileupload(List<MultipartFile> files, int bno);
+	public int fileupload(List<MultipartFile> files, int bno) throws Exception;
 	
 	public String getFolder();
 	

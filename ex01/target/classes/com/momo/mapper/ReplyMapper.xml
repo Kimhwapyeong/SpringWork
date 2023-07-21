@@ -23,6 +23,12 @@
 			)
 		where rn between #{cri.startNo} and #{cri.endNo}
 	</select>
+	
+	<select id="getListTotal" resultType="com.momo.vo.ReplyVO">
+		select *
+		from tbl_reply
+		where bno = #{bno}
+	</select>
 
 	<insert id="insert">
 		insert into tbl_reply (rno, bno, reply, replyer, replydate)

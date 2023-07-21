@@ -67,7 +67,8 @@ public class FileuploadController extends CommonRestController{
 	 * @return
 	 */
 	@PostMapping("/file/fileuploadAction")
-	public String fileuploadAction(List<MultipartFile> files, int bno, RedirectAttributes rttr) {
+	public String fileuploadAction(List<MultipartFile> files, int bno
+								, RedirectAttributes rttr)throws Exception {
 
 		int insertRes = service.fileupload(files, bno);
 //		files.forEach(file ->{   /// forEach를 사용하면 밖에서 선언된 변수에 접근 불가하여 변경
@@ -79,7 +80,7 @@ public class FileuploadController extends CommonRestController{
 	}
 
 	@PostMapping("/file/fileuploadActionFetch")
-	public @ResponseBody Map<String, Object> fileuploadAction(List<MultipartFile> files, int bno) {
+	public @ResponseBody Map<String, Object> fileuploadAction(List<MultipartFile> files, int bno)throws Exception {
 		
 		log.info("fileuploadActionFetch");
 		int insertRes = service.fileupload(files, bno);

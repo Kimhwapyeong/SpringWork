@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.momo.vo.BnoArr;
 import com.momo.vo.BoardVO;
@@ -16,14 +17,17 @@ public interface BoardService {
 	
 	public int insert(BoardVO board);
 	
-	public int insertSelectKey(BoardVO board);
+	public int insertSelectKey(BoardVO board, List<MultipartFile> files) throws Exception;
 	
 	public BoardVO getOne(String bno);
 	
 //	public int delete(String bno);
 	public int delete(BnoArr bnoArry);
 	
-	public int update(BoardVO board);
+	public int deleteOne(int bno);
+	
+//	public int update(BoardVO board);
+	public int update(BoardVO board, List<MultipartFile> files) throws Exception;
 	
 	public int getTotalCnt(Criteria cri);
 	

@@ -4,12 +4,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.momo.mapper.BoardMapper;
+import com.momo.mapper.ReplyMapper;
 import com.momo.vo.BnoArr;
 import com.momo.vo.BoardVO;
 import com.momo.vo.Criteria;
+import com.momo.vo.FileuploadVO;
+import com.momo.vo.ReplyVO;
 import com.momo.vo.pageDto;
 
 /**
@@ -37,8 +42,15 @@ import com.momo.vo.pageDto;
 public class BoardServiceImpl implements BoardService{
 
 	@Autowired
-	private BoardMapper boardMapper;
+	BoardMapper boardMapper;
+	
+	@Autowired
+	ReplyMapper replyMapper;
 
+	@Autowired
+	FileuploadService fileuploadService;
+	
+	
 	@Override
 	public List<BoardVO> getListXml(Criteria cri, Model model) {
 		/*
@@ -64,10 +76,23 @@ public class BoardServiceImpl implements BoardService{
 		return boardMapper.insert(board);
 	}
 
+//	@Override
+//	public int insertSelectKey(BoardVO board) {
+//		
+//		return boardMapper.insertSelectKey(board);
+//	}예외 처리는 서비스
 	@Override
-	public int insertSelectKey(BoardVO board) {
+	@Transactional(rollbackFor = Exception.class)  /// throws를 하면서 Transactional 어노테이션을 달아주면 작동 안됨.
+												   /// 그때는 (rollbackFor) 옵션을 주어야 한다.
+	public int insertSelectKey(BoardVO board, List<MultipartFile> files) throws Exception {
 		
-		return boardMapper.insertSelectKey(board);
+		// 게시물 등록
+		int res = boardMapper.insertSelectKey(board);
+		
+		// 파일 첨부
+		fileuploadService.fileupload(files, Integer.parseInt(board.getBno()));
+		
+		return res; 
 	}
 
 	@Override
@@ -83,14 +108,52 @@ public class BoardServiceImpl implements BoardService{
 //	}
 	@Override
 	public int delete(BnoArr bnoArry) {
-		
+
 		return boardMapper.delete(bnoArry);
 	}
 
 	@Override
-	public int update(BoardVO board) {
+	@Transactional
+	public int deleteOne(int bno) {
+		// 게시물을 삭제시 첨부된 파일, 댓글이 있는 경우 오류가 발생
+		// 첨부파일을 모두 삭제
+		// 첨부파일 리스트 조회 - fileuploadService
+		List<FileuploadVO> files = fileuploadService.getList(bno);
+		// 리스트를 돌면서 삭제 처리
+		// 삭제처리 - fileuploadService
+		if(files != null) {
+			for(FileuploadVO file : files) {
+				fileuploadService.delete(file);
+			}
+		}
+		// 댓글 삭제
+		List<ReplyVO> replys = replyMapper.getListTotal(bno);
+		if(replys != null) {
+			for(ReplyVO reply : replys) {
+				replyMapper.delete(reply.getRno());
+			}
+		}
 		
-		return boardMapper.update(board);
+		int res = boardMapper.deleteOne(bno);
+		return res;
+	}
+
+//	@Override
+//	@Transactional
+//	public int update(BoardVO board) {
+//		
+//		return boardMapper.update(board);
+//	}
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public int update(BoardVO board, List<MultipartFile> files) throws Exception {
+		
+		int res = boardMapper.update(board);
+		
+		// 파일 첨부
+		fileuploadService.fileupload(files, Integer.parseInt(board.getBno()));
+		
+		return res;
 	}
 
 	@Override
