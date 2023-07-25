@@ -1,5 +1,7 @@
 package com.momo.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -15,5 +17,7 @@ public interface MemberService {
 	public int insert(Member member);
 	
 	public int idCheck(Member member);
+
+	public void naverLogin(HttpServletRequest request, Model model);
 	
 }

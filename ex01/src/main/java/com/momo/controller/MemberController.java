@@ -21,6 +21,19 @@ public class MemberController extends CommonRestController{
 	
 	@Autowired
 	MemberService service;
+		
+	@GetMapping("/login/naver")
+	public void naverLogin() {
+		
+	}
+	
+	@GetMapping("/login/naver_callback")
+	public String naverLogin_callback(HttpServletRequest request,
+										Model model) {
+		service.naverLogin(request, model);
+		
+		return "/login/naver";
+	}
 	
 	/**
 	 * 로그인 페이지 이동
